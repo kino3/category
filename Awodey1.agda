@@ -11,11 +11,43 @@ https://github.com/konn/category-agda
 ===================================================-}
 open import Level
 
--- Definition 1.1
--- A category consists of the following data:
+-------------------------------------
+-- 1.2 Functions of sets
+-------------------------------------
 
--- Axiom of Category.
--- This is used in definition of Category.
+-- P.3
+func : {l : Level} → (A B : Set l) → Set _
+func A B = A → B
+
+_∘_ : {l : Level} {A B C : Set l} → func B C → func A B → func A C
+(g ∘ f) a = g (f a)
+
+open import Relation.Binary.Core -- use _≡_
+
+∘-assoc : ∀{l} {A B C D : Set l} 
+               {h : func C D} {g : func B C} {f : func A B}
+  → (h ∘ g) ∘ f ≡ h ∘ (g ∘ f)
+∘-assoc = refl
+
+-- P.4
+id-func : {l : Level} (A : Set l) → func A A
+id-func A = λ a → a
+
+-- "∀{l} = {l : Level}" (syntax sugar)
+id-func-right : ∀{l} {A B : Set l} {f : func A B}
+ → f ∘ id-func A ≡ f
+id-func-right = refl
+
+id-func-left : ∀{l} {A B : Set l} {f : func A B}
+ → f ≡ id-func B ∘ f
+id-func-left = refl
+
+-------------------------------------
+-- 1.3 Definition of a category
+-------------------------------------
+
+-- *** Definition 1.1 ***
+-- A category consists of the following data:
 
 record Category (c1 c2 l : Level) : Set (suc (c1 ⊔ c2 ⊔ l)) where
   field
@@ -43,20 +75,18 @@ record Category (c1 c2 l : Level) : Set (suc (c1 ⊔ c2 ⊔ l)) where
     Comp-cong : {A B C : Obj} {f f' : Hom A B} {g g' : Hom B C}
       → f ≈ f' → g ≈ g' → Comp g f ≈ Comp g' f' 
 
-function : {l : Level} → (A B : Set l) → Set _
-function A B = A → B
 
 sets : {l : Level} → Category _ _ l 
 sets {l} = record {
              Obj = Set l;
-             Hom = function;
-             Comp = {!!};
-             Id = {!!};
-             _≈_ = {!!};
-             Id-left = {!!};
-             Id-right = {!!};
-             assoc = {!!};
-             ≈-refl = {!!};
+             Hom = func;
+             Comp = _∘_;
+             Id = id-func;
+             _≈_ = _≡_;
+             Id-left = id-func-left;
+             Id-right = id-func-right;
+             assoc = ∘-assoc;
+             ≈-refl = refl;
              ≈-sym = {!!};
              ≈-trans = {!!};
              Comp-cong = {!!} }
