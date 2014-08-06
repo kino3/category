@@ -50,7 +50,7 @@ id-func-left = refl
 -- *** Definition 1.1 ***
 -- A category consists of the following data:
 
-record Category (c1 c2 l : Level) : Set (suc (c1 ⊔ c2 ⊔ l)) where
+record Category {c1 c2 l : Level} : Set (suc (c1 ⊔ c2 ⊔ l)) where
   field
     -- data
     Obj  : Set c1 
@@ -76,20 +76,22 @@ record Category (c1 c2 l : Level) : Set (suc (c1 ⊔ c2 ⊔ l)) where
     Comp-cong : {A B C : Obj} {f f' : Hom A B} {g g' : Hom B C}
       → f ≈ f' → g ≈ g' → Comp g f ≈ Comp g' f' 
 
+module ≡-props where
+ ≡-sym : ∀{l} {A B : Set l} {f g : func A B} → f ≡ g → g ≡ f
+ ≡-sym {l} {A} {B} {f} {.f} refl = refl
 
-≡-sym : ∀{l} {A B : Set l} {f g : func A B} → f ≡ g → g ≡ f
-≡-sym {l} {A} {B} {f} {.f} refl = refl
+ ≡-trans : ∀{l} {A B : Set l} {f g h : func A B} → f ≡ g → g ≡ h → f ≡ h
+ ≡-trans {l} {A} {B} {f} {.f} {.f} refl refl = refl
 
-≡-trans : ∀{l} {A B : Set l} {f g h : func A B} → f ≡ g → g ≡ h → f ≡ h
-≡-trans {l} {A} {B} {f} {.f} {.f} refl refl = refl
-
-≡-cong : ∀{l} {A B C : Set l} {f f' : func A B} {g g' : func B C}
+ ≡-cong : ∀{l} {A B C : Set l} {f f' : func A B} {g g' : func B C}
       → f ≡ f' → g ≡ g' →  g ∘ f ≡  g' ∘ f' 
-≡-cong {l} {A} {B} {C} {f} {.f} {g} {.g} refl refl = refl
+ ≡-cong {l} {A} {B} {C} {f} {.f} {g} {.g} refl refl = refl
 
-Sets : {l : Level} → Category _ _ l 
-Sets {l} = record {
-             Obj = Set l;
+open ≡-props
+
+Sets : Category
+Sets = record {
+             Obj = Set;
              Hom = func;
              Comp = _∘_;
              Id = id-func;
@@ -97,9 +99,19 @@ Sets {l} = record {
              Id-left = id-func-left;
              Id-right = id-func-right;
              assoc = λ {A} {B} {C} {D} {f} {g} {h} 
-               → ∘-assoc {l} {A} {B} {C} {D} {f} {g} {h};
+               → ∘-assoc {_} {A} {B} {C} {D} {f} {g} {h};
              ≈-refl = refl;
              ≈-sym  = ≡-sym;
              ≈-trans = ≡-trans;
              Comp-cong = ≡-cong }
 
+
+record Functor {c1 c2 l c1' c2' l' : Level} 
+               (C : Category {c1} {c2} {l}) 
+               (D : Category {c1'} {c2'} {l}) : 
+                Set (suc (c1 ⊔ c2 ⊔ l ⊔ c1' ⊔ c2' ⊔ l')) where
+  field
+    Fobj[_] : Category.Obj C → Category.Obj D
+    Fhom[_] : {A B : Category.Obj C} 
+      → Category.Hom C A B → Category.Hom D (Fobj[ A ]) (Fobj[ B ])
+    
