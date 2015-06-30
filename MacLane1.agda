@@ -1,24 +1,26 @@
 module MacLane1 where
 
+-- I. Categories, Functors, and Natural Transformations
+
+--- 1. Axiom for Categories (P.7)
+
+--- 2. Categories (P.10)
+---- A category will mean any interpretation of the category axioms within set theory.
 open import Level
 
--- definition using hom-set
-
-record Category {l m n : Level} : Set (suc (l ⊔ m ⊔ n)) where
+record Category : Set1 where
   field
-    O : Set n
-    Hom : (a b : O) → Set m
-    _∘_ : {a b c : O} → Hom b c → Hom a b → Hom a c
-    id : (c : O) → Hom c c
-  dom : {a b : O} → Hom a b → O
-  dom {d} {c} = λ x → d
-  cod : {a b : O} → Hom a b → O
-  cod {d} {c} = λ x → c
+    O : Set
+    A : O → O → Set
 
--- use   
---open import Categories.Category
+  Objects = O
+  Arrows  = A
 
-a : {l1 l2 l3 : Level} → Category l1 l2 l3 
-a = λ {l1} {l2} {l3} → record { Obj = {!!}; _⇒_ = {!!} }
-    
-
+  dom : {a b : O} → A a b → O
+  dom {a} {b} f = a
+  cod : {a b : O} → A a b → O
+  cod {a} {b} f = b
+  
+  field
+    id : (a : O) → A a a
+    _×_ : {a b c : O} → A b c → A a b → A a c

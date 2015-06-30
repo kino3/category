@@ -2,8 +2,10 @@ module Category where
 
 open import Level renaming (zero to l0)
 open import Relation.Binary.PropositionalEquality
+open import Relation.Binary.Core
 open import Data.Product renaming (_×_ to _and_)
 open import Data.Empty
+open import Algebra
 
 record Category (l₁ l₂ l₃ : Level) : Set (suc (l₁ ⊔ l₂ ⊔ l₃)) where
   field
@@ -18,11 +20,13 @@ record Category (l₁ l₂ l₃ : Level) : Set (suc (l₁ ⊔ l₂ ⊔ l₃)) wh
       → k ∘ (g ∘ f) ≈ (k ∘ g) ∘ f
     unit-law : ∀ {A B C} {f : Hom A B} {g : Hom B C} 
       → id B ∘ f ≈ f and g ∘ id B ≈ g 
+    ≈-eq : IsEquivalence (_≈_ {A = {!!}} {B = {!!}})
  
   infixl 10 _∘_        
   infix   5 _≈_
   infix  20 id
 
+{-
 empty : Category l0 l0 l0
 empty = record
           { Obj = ⊥
@@ -45,3 +49,15 @@ C1 = record
        ; associativity = {!!}
        ; unit-law = {!!}
        }
+
+Mon : Category l0 l0 l0
+Mon = record
+        { Obj = ⊤
+        ; Hom = λ t1 t2 → Monoid.Carrier {!!}
+        ; _≈_ = {!!}
+        ; _∘_ = {!!}
+        ; id = {!!}
+        ; associativity = {!!}
+        ; unit-law = {!!}
+        }
+-}
