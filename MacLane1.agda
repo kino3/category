@@ -1,3 +1,7 @@
+{-
+  Categories for the Working Mathematician 2nd. Edition in Agda
+  by none-Mathematician (>_<)
+-}
 module MacLane1 where
 
 -- I. Categories, Functors, and Natural Transformations
@@ -9,8 +13,6 @@ module MacLane1 where
  A category will mean any interpretation of 
   the category axioms within set theory.
 -}
-
-
 
 open import Level
 open import Relation.Binary
@@ -44,7 +46,6 @@ record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
 -- Examples of Categories (P.10)
 -- ==============================
 
-
 module Empty-Category where
   data No-Obj : Set where
   data No-Arrow : No-Obj → No-Obj → Set where
@@ -64,3 +65,4 @@ module Empty-Category where
              → record { refl = λ {} ; sym = λ {} ; trans = λ {} }
            ; ≈-resp = λ {a} {b} {c} {f1} {f2} {g1} → λ {}
            }
+  -- MEMO: confusing... but Agda tells us an answer by Auto (C-c C-a).
