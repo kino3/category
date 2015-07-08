@@ -69,27 +69,27 @@ module Category0 where
            }
   -- MEMO: confusing... but Agda tells us an answer by Auto (C-c C-a).
 
-open Category0 public
+--open Category0 public
 
 module Category1 where
 
-  data One-Obj : Set where
-    * : One-Obj
+  data Obj1 : Set where
+    * : Obj1
 
-  data One-Arrow : One-Obj → One-Obj → Set where
-    *→* : One-Arrow * *
+  data Arrow1 : Obj1 → Obj1 → Set where
+    *→* : Arrow1 * *
 
-  _∘_ : {a b c : One-Obj} → One-Arrow b c → One-Arrow a b → One-Arrow a c
+  _∘_ : {a b c : Obj1} → Arrow1 b c → Arrow1 a b → Arrow1 a c
   *→* ∘ *→* = *→*
 
-  id : (a : One-Obj) → One-Arrow a a
+  id : (a : Obj1) → Arrow1 a a
   id * = *→*
 
   -- 1 is the category with one object and one (identity) arrow;
   ONE : Category zero zero zero
   ONE = record
-          { Obj = One-Obj
-          ; Hom = One-Arrow
+          { Obj = Obj1
+          ; Hom = Arrow1
           ; _o_ = _∘_
           ; id = id
           ; _≈_ = _≡_
@@ -100,15 +100,80 @@ module Category1 where
           ; ≈-cong = λ f1=f2 g1=g2 → cong₂ (λ f g → g ∘ f) f1=f2 g1=g2
           }
     where
-      assoc-proof : {a b c d : One-Obj} {f : One-Arrow a b} 
-                    {g : One-Arrow b c} {k : One-Arrow c d} →
+      assoc-proof : {a b c d : Obj1} {f : Arrow1 a b} 
+                    {g : Arrow1 b c} {k : Arrow1 c d} →
                      (k ∘ (g ∘ f)) ≡ ((k ∘ g) ∘ f)
       assoc-proof {*}{*}{*}{*} {*→*}{*→*}{*→*} = refl
 
-      unitL-proof : {a b : One-Obj} {f : One-Arrow a b} → (id b ∘ f) ≡ f
+      unitL-proof : {a b : Obj1} {f : Arrow1 a b} → (id b ∘ f) ≡ f
       unitL-proof {*}{*} {*→*} = refl
 
-      unitR-proof : {b c : One-Obj} {g : One-Arrow b c} → (g ∘ id b) ≡ g
+      unitR-proof : {b c : Obj1} {g : Arrow1 b c} → (g ∘ id b) ≡ g
       unitR-proof {*}{*} {*→*} = refl
 
-open Category1 public
+--open Category1 public
+
+module Category2 where
+
+  data Obj2 : Set where
+    *1 : Obj2
+    *2 : Obj2
+
+  data Arrow2 : Obj2 → Obj2 → Set where
+    1→2 : Arrow2 *1 *2
+    id1 : Arrow2 *1 *1
+    id2 : Arrow2 *2 *2
+
+  _∘_ : {a b c : Obj2} → Arrow2 b c → Arrow2 a b → Arrow2 a c
+  1→2 ∘ id1 = 1→2
+  id1 ∘ id1 = id1
+  id2 ∘ 1→2 = 1→2
+  id2 ∘ id2 = id2
+
+  id : (a : Obj2) → Arrow2 a a
+  id *1 = id1
+  id *2 = id2 
+
+  TWO : Category zero zero zero
+  TWO = record
+          { Obj = Obj2
+          ; Hom = Arrow2
+          ; _o_ = _∘_
+          ; id = id
+          ; _≈_ = _≡_
+          ; assoc = λ {a b c d : Obj2} {f : Arrow2 a b} {g : Arrow2 b c} {k : Arrow2 c d} 
+                    → assoc-proof {a}{b}{c}{d}{f}{g}{k} -- I wonder why I should write this {}s way...
+          ; unitL = unitL-proof
+          ; unitR = unitR-proof
+          ; ≈-equiv = isEquivalence
+          ; ≈-cong = λ f1=f2 g1=g2 → cong₂ (λ f g → g ∘ f) f1=f2 g1=g2
+          }
+   where
+     assoc-proof : {a b c d : Obj2}{f : Arrow2 a b} {g : Arrow2 b c}
+                   {k : Arrow2 c d} → k ∘ (g ∘ f) ≡ (k ∘ g) ∘ f
+     assoc-proof {*1} {*1} {*1} {*1} {id1} {id1} {id1} = refl
+     assoc-proof {*1} {*1} {*1} {*2} {id1} {id1} {1→2} = refl
+     assoc-proof {*1} {*1} {*2} {*1} {id1} {1→2} {()}
+     assoc-proof {*1} {*1} {*2} {*2} {id1} {1→2} {id2} = refl
+     assoc-proof {*1} {*2} {*1} {*1} {1→2} {()}
+     assoc-proof {*1} {*2} {*1} {*2} {1→2} {()}
+     assoc-proof {*1} {*2} {*2} {*1} {1→2} {id2} {()}
+     assoc-proof {*1} {*2} {*2} {*2} {1→2} {id2} {id2} = refl
+     assoc-proof {*2} {*1} {*1} {*1} {()}
+     assoc-proof {*2} {*1} {*1} {*2} {()}
+     assoc-proof {*2} {*1} {*2} {*1} {()}
+     assoc-proof {*2} {*1} {*2} {*2} {()}
+     assoc-proof {*2} {*2} {*1} {*1} {id2} {()}
+     assoc-proof {*2} {*2} {*1} {*2} {id2} {()}
+     assoc-proof {*2} {*2} {*2} {*1} {id2} {id2} {()}
+     assoc-proof {*2} {*2} {*2} {*2} {id2} {id2} {id2}  = refl
+
+     unitL-proof : {a b : Obj2} {f : Arrow2 a b} → id b ∘ f ≡ f
+     unitL-proof {b = *1} {f = id1} = refl
+     unitL-proof {b = *2} {f = 1→2} = refl
+     unitL-proof {b = *2} {f = id2} = refl
+
+     unitR-proof : {b c : Obj2} {g : Arrow2 b c} → g ∘ id b ≡ g
+     unitR-proof {c = *1} {g = id1} = refl
+     unitR-proof {c = *2} {g = 1→2} = refl
+     unitR-proof {c = *2} {g = id2} = refl
