@@ -4,6 +4,11 @@
 -}
 module MacLane1 where
 
+open import Level
+open import Relation.Binary using (IsEquivalence)
+open import Relation.Binary.PropositionalEquality
+
+
 -- I. Categories, Functors, and Natural Transformations
 
 --- 1. Axiom for Categories (P.7)
@@ -13,10 +18,6 @@ module MacLane1 where
  A category will mean any interpretation of 
   the category axioms within set theory.
 -}
-
-open import Level
-open import Relation.Binary using (IsEquivalence)
-open import Relation.Binary.PropositionalEquality
 
 -- (using 8. Hom-Sets notation P.27)
 record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
