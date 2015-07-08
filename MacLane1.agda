@@ -15,7 +15,8 @@ module MacLane1 where
 -}
 
 open import Level
-open import Relation.Binary
+open import Relation.Binary using (IsEquivalence)
+open import Relation.Binary.PropositionalEquality
 
 -- (using 8. Hom-Sets notation P.27)
 record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
@@ -39,14 +40,14 @@ record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
     unitR   : {b c : Obj} {g : Hom b c} → g o id b ≈ g
     -- Property of _≈_
     ≈-equiv : {a b : Obj} → IsEquivalence {l2} {l3} {Hom a b} _≈_ 
-    ≈-resp  : {a b c : Obj} {f1 f2 : Hom a b} {g1 g2 : Hom b c} 
+    ≈-cong  : {a b c : Obj} {f1 f2 : Hom a b} {g1 g2 : Hom b c} 
             → f1 ≈ f2 → g1 ≈ g2 → g1 o f1 ≈ g2 o f2  
     
 -- ==============================
 -- Examples of Categories (P.10)
 -- ==============================
 
-module Empty-Category where
+module Category0 where
   data No-Obj : Set where
   data No-Arrow : No-Obj → No-Obj → Set where
 
@@ -63,6 +64,50 @@ module Empty-Category where
            ; unitR = λ {b} {c} → λ {}
            ; ≈-equiv = λ {a} {b} 
              → record { refl = λ {} ; sym = λ {} ; trans = λ {} }
-           ; ≈-resp = λ {a} {b} {c} {f1} {f2} {g1} → λ {}
+           ; ≈-cong = λ {a} {b} {c} {f1} {f2} {g1} → λ {}
            }
   -- MEMO: confusing... but Agda tells us an answer by Auto (C-c C-a).
+
+open Category0 public
+
+module Category1 where
+
+  data One-Obj : Set where
+    * : One-Obj
+
+  data One-Arrow : One-Obj → One-Obj → Set where
+    *→* : One-Arrow * *
+
+  _∘_ : {a b c : One-Obj} → One-Arrow b c → One-Arrow a b → One-Arrow a c
+  *→* ∘ *→* = *→*
+
+  id : (a : One-Obj) → One-Arrow a a
+  id * = *→*
+
+  -- 1 is the category with one object and one (identity) arrow;
+  ONE : Category zero zero zero
+  ONE = record
+          { Obj = One-Obj
+          ; Hom = One-Arrow
+          ; _o_ = _∘_
+          ; id = id
+          ; _≈_ = _≡_
+          ; assoc = assoc-proof
+          ; unitL = unitL-proof
+          ; unitR = unitR-proof
+          ; ≈-equiv = isEquivalence
+          ; ≈-cong = λ f1=f2 g1=g2 → cong₂ (λ f g → g ∘ f) f1=f2 g1=g2
+          }
+    where
+      assoc-proof : {a b c d : One-Obj} {f : One-Arrow a b} 
+                    {g : One-Arrow b c} {k : One-Arrow c d} →
+                     (k ∘ (g ∘ f)) ≡ ((k ∘ g) ∘ f)
+      assoc-proof {*}{*}{*}{*} {*→*}{*→*}{*→*} = refl
+
+      unitL-proof : {a b : One-Obj} {f : One-Arrow a b} → (id b ∘ f) ≡ f
+      unitL-proof {*}{*} {*→*} = refl
+
+      unitR-proof : {b c : One-Obj} {g : One-Arrow b c} → (g ∘ id b) ≡ g
+      unitR-proof {*}{*} {*→*} = refl
+
+open Category1 public
