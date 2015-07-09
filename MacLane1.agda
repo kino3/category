@@ -29,10 +29,6 @@ record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
    -- In Agda, equality is not trivial, but to be defined everytime.
     _≈_ : {a b : Obj} → Hom a b → Hom a b → Set l3 -- equality of Hom
 
-  infix 1 _≈_
-  infixl 10 _o_
-  infix 20 id
-
   -- Axioms
   field
     assoc   : {a b c d : Obj} {f : Hom a b} {g : Hom b c} {k : Hom c d}
@@ -43,6 +39,10 @@ record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
     ≈-equiv : {a b : Obj} → IsEquivalence {l2} {l3} {Hom a b} _≈_ 
     ≈-cong  : {a b c : Obj} {f1 f2 : Hom a b} {g1 g2 : Hom b c} 
             → f1 ≈ f2 → g1 ≈ g2 → g1 o f1 ≈ g2 o f2  
+
+  infix   1 _≈_
+  infixl 10 _o_
+  infix  20 id
     
 -- ==============================
 -- Examples of Categories (P.10)
@@ -177,3 +177,51 @@ module Category2 where
      unitR-proof {c = *1} {g = id1} = refl
      unitR-proof {c = *2} {g = 1→2} = refl
      unitR-proof {c = *2} {g = id2} = refl
+
+module Category3 where
+  
+  data Obj3 : Set where
+    *1 *2 *3 : Obj3
+
+  data Arrow3 : Obj3 → Obj3 → Set where
+    1→2 : Arrow3 *1 *2
+    2→3 : Arrow3 *2 *3
+    1→3 : Arrow3 *1 *3
+    id  : (a : Obj3) → Arrow3 a a -- abbriviation
+
+  _∘_ : {a b c : Obj3} → Arrow3 b c → Arrow3 a b → Arrow3 a c
+  g ∘ id a = g
+  id b ∘ f = f
+  2→3 ∘ 1→2 = 1→3
+
+  THREE : Category zero zero zero
+  THREE = record
+            { Obj = Obj3
+            ; Hom = Arrow3
+            ; _o_ = _∘_
+            ; id = id
+            ; _≈_ = _≡_
+            ; assoc = λ {a b c d : Obj3} {f : Arrow3 a b} {g : Arrow3 b c} {k : Arrow3 c d} 
+                      → assoc-proof {a} {b} {c} {d} {f} {g} {k}
+            ; unitL = unitL-proof
+            ; unitR = unitR-proof
+            ; ≈-equiv = isEquivalence
+            ; ≈-cong = λ f1=f2 g1=g2 → cong₂ (λ f g → g ∘ f) f1=f2 g1=g2
+            }
+    where
+      assoc-proof :  {a b c d : Obj3} {f : Arrow3 a b} {g : Arrow3 b c}
+                     {k : Arrow3 c d} → k ∘ (g ∘ f) ≡ (k ∘ g) ∘ f
+      assoc-proof = {!!}
+
+      unitL-proof : {a b : Obj3} {f : Arrow3 a b} → id b ∘ f ≡ f
+      unitL-proof {b = *1} {id .*1} = refl
+      unitL-proof {b = *2} {1→2}    = refl
+      unitL-proof {b = *2} {id .*2} = refl
+      unitL-proof {b = *3} {2→3}    = refl
+      unitL-proof {b = *3} {1→3}    = refl
+      unitL-proof {b = *3} {id .*3} = refl
+
+      unitR-proof : {b c : Obj3} {g : Arrow3 b c} → g ∘ id b ≡ g
+      unitR-proof {c = *1} = refl
+      unitR-proof {c = *2} = refl
+      unitR-proof {c = *3} = refl
