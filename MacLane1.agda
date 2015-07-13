@@ -211,7 +211,17 @@ module Category3 where
     where
       assoc-proof :  {a b c d : Obj3} {f : Arrow3 a b} {g : Arrow3 b c}
                      {k : Arrow3 c d} → k ∘ (g ∘ f) ≡ (k ∘ g) ∘ f
-      assoc-proof = {!!}
+      assoc-proof {f = 1→2} {2→3} {id .*3} = refl
+      assoc-proof {f = 1→2} {id .*2} = refl
+      assoc-proof {f = 2→3} {id .*3} = refl
+      assoc-proof {f = 1→3} {id .*3} = refl
+      assoc-proof {f = id .*1} {1→2} = refl
+      assoc-proof {f = id .*2} {2→3} = refl
+      assoc-proof {f = id .*1} {1→3} = refl
+      assoc-proof {f = id .*1} {id .*1} {1→2} = refl
+      assoc-proof {f = id .*2} {id .*2} {2→3} = refl
+      assoc-proof {f = id .*1} {id .*1} {1→3} = refl
+      assoc-proof {f = id ._} {id ._} {id ._} = refl
 
       unitL-proof : {a b : Obj3} {f : Arrow3 a b} → id b ∘ f ≡ f
       unitL-proof {b = *1} {id .*1} = refl
