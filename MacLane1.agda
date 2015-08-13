@@ -235,3 +235,47 @@ module Category3 where
       unitR-proof {c = *1} = refl
       unitR-proof {c = *2} = refl
       unitR-proof {c = *3} = refl
+
+module Monoid-is-Category where
+
+  data * : Set where
+    tt : *
+
+  open import Algebra
+  open import Algebra.Structures
+  open import Algebra.FunctionProperties
+  open import Data.Product
+
+  postulate
+    x : Monoid zero zero
+
+  M : Category zero zero zero
+  M = record
+        { Obj = *
+        ; Hom = λ a b → Monoid.Carrier x
+        ; _o_ = Monoid._∙_ x
+        ; id = λ a → Monoid.ε x
+        ; _≈_ = Monoid._≈_ x
+        ; assoc = λ {a} {b} {c} {d} {f} {g} {k} → {!!}
+        ; unitL = λ {a} {b} {f} → proj₁ (IsMonoid.identity (Monoid.isMonoid x)) f
+        ; unitR = λ {b} {c} {g} → proj₂ (IsMonoid.identity (Monoid.isMonoid x)) g
+        ; ≈-equiv = IsSemigroup.isEquivalence (IsMonoid.isSemigroup (Monoid.isMonoid x))
+        ; ≈-cong = λ {a} {b} {c} {f1} {f2} {g1} {g2} 
+            → cong-proof {a} {b} {c} {f1} {f2} {g1} {g2}
+        }
+            where
+              cong-proof : {a b c : *} {f1 f2 g1 g2 : Monoid.Carrier x} →  
+                (x Monoid.≈ f1) f2 →
+                (x Monoid.≈ g1) g2 →
+                (x Monoid.≈ (x Monoid.∙ g1) f1) ((x Monoid.∙ g2) f2)
+              cong-proof {a} {b} {c} {f1} {f2} {g1} {g2} 
+                = IsSemigroup.∙-cong {zero} {zero} {Monoid.Carrier {zero} {zero} x} 
+                                                   {Monoid._≈_ {zero} {zero} x} {Monoid._∙_ {zero} {zero} 
+                 (record { Carrier = Monoid.Carrier {zero} x ; _≈_ = Monoid._≈_ {zero} x ; _∙_ = Monoid._∙_ {zero} {zero} {!x!} 
+                    ; ε = Monoid.ε x ; isMonoid = Monoid.isMonoid {!x!} })}
+                    (IsMonoid.isSemigroup {zero} {zero} 
+                                     {Monoid.Carrier {zero} {zero} x} {Monoid._≈_ {zero} {zero} x} 
+                                     {Monoid._∙_ {zero} {zero} {!x!}} {Monoid.ε x}
+                       (Monoid.isMonoid {zero} {zero} {!x!}))
+-- 5. Monics, Epis, and Zeros
+
