@@ -37,8 +37,8 @@ record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
     unitR   : {b c : Obj} {g : Hom b c} → g o id b ≈ g
     -- Property of _≈_
     ≈-equiv : {a b : Obj} → IsEquivalence {l2} {l3} {Hom a b} _≈_ 
-    ≈-cong  : {a b c : Obj} {f1 f2 : Hom a b} {g1 g2 : Hom b c} 
-            → f1 ≈ f2 → g1 ≈ g2 → g1 o f1 ≈ g2 o f2  
+    ≈-cong  : {a b c : Obj} {f1 f2 : Hom b c} {g1 g2 : Hom a b} 
+            → f1 ≈ f2 → g1 ≈ g2 → f1 o g1 ≈ f2 o g2  
 
   infix   1 _≈_
   infixl 10 _o_
@@ -97,7 +97,7 @@ module Category1 where
           ; unitL = unitL-proof
           ; unitR = unitR-proof
           ; ≈-equiv = isEquivalence
-          ; ≈-cong = λ f1=f2 g1=g2 → cong₂ (λ f g → g ∘ f) f1=f2 g1=g2
+          ; ≈-cong = λ f1=f2 g1=g2 → cong₂ _∘_ f1=f2 g1=g2 
           }
     where
       assoc-proof : {a b c d : Obj1} {f : Arrow1 a b} 
@@ -146,7 +146,7 @@ module Category2 where
           ; unitL = unitL-proof
           ; unitR = unitR-proof
           ; ≈-equiv = isEquivalence
-          ; ≈-cong = λ f1=f2 g1=g2 → cong₂ (λ f g → g ∘ f) f1=f2 g1=g2
+          ; ≈-cong = λ f1=f2 g1=g2 → cong₂ _∘_ f1=f2 g1=g2
           }
    where
      assoc-proof : {a b c d : Obj2}{f : Arrow2 a b} {g : Arrow2 b c}
@@ -206,7 +206,7 @@ module Category3 where
             ; unitL = unitL-proof
             ; unitR = unitR-proof
             ; ≈-equiv = isEquivalence
-            ; ≈-cong = λ f1=f2 g1=g2 → cong₂ (λ f g → g ∘ f) f1=f2 g1=g2
+            ; ≈-cong = λ f1=f2 g1=g2 → cong₂ _∘_ f1=f2 g1=g2
             }
     where
       assoc-proof :  {a b c d : Obj3} {f : Arrow3 a b} {g : Arrow3 b c}
@@ -245,10 +245,12 @@ module Monoid-is-Category where
   open import Algebra.Structures
   open import Algebra.FunctionProperties
   open import Data.Product
+  open import Relation.Binary.Core
 
   postulate
     x : Monoid zero zero
 
+  -- if x is a Monoid, x is also a Category. (described as M below.)
   M : Category zero zero zero
   M = record
         { Obj = *
@@ -256,26 +258,14 @@ module Monoid-is-Category where
         ; _o_ = Monoid._∙_ x
         ; id = λ a → Monoid.ε x
         ; _≈_ = Monoid._≈_ x
-        ; assoc = λ {a} {b} {c} {d} {f} {g} {k} → {!!}
+        ; assoc = λ {a} {b} {c} {d} {f} {g} {k} 
+          → IsEquivalence.sym (IsSemigroup.isEquivalence (IsMonoid.isSemigroup (Monoid.isMonoid x))) 
+                              (IsSemigroup.assoc (IsMonoid.isSemigroup (Monoid.isMonoid x)) k g f)
         ; unitL = λ {a} {b} {f} → proj₁ (IsMonoid.identity (Monoid.isMonoid x)) f
         ; unitR = λ {b} {c} {g} → proj₂ (IsMonoid.identity (Monoid.isMonoid x)) g
         ; ≈-equiv = IsSemigroup.isEquivalence (IsMonoid.isSemigroup (Monoid.isMonoid x))
-        ; ≈-cong = λ {a} {b} {c} {f1} {f2} {g1} {g2} 
-            → cong-proof {a} {b} {c} {f1} {f2} {g1} {g2}
+        ; ≈-cong = IsSemigroup.∙-cong (IsMonoid.isSemigroup (Monoid.isMonoid x))
         }
-            where
-              cong-proof : {a b c : *} {f1 f2 g1 g2 : Monoid.Carrier x} →  
-                (x Monoid.≈ f1) f2 →
-                (x Monoid.≈ g1) g2 →
-                (x Monoid.≈ (x Monoid.∙ g1) f1) ((x Monoid.∙ g2) f2)
-              cong-proof {a} {b} {c} {f1} {f2} {g1} {g2} 
-                = IsSemigroup.∙-cong {zero} {zero} {Monoid.Carrier {zero} {zero} x} 
-                                                   {Monoid._≈_ {zero} {zero} x} {Monoid._∙_ {zero} {zero} 
-                 (record { Carrier = Monoid.Carrier {zero} x ; _≈_ = Monoid._≈_ {zero} x ; _∙_ = Monoid._∙_ {zero} {zero} {!x!} 
-                    ; ε = Monoid.ε x ; isMonoid = Monoid.isMonoid {!x!} })}
-                    (IsMonoid.isSemigroup {zero} {zero} 
-                                     {Monoid.Carrier {zero} {zero} x} {Monoid._≈_ {zero} {zero} x} 
-                                     {Monoid._∙_ {zero} {zero} {!x!}} {Monoid.ε x}
-                       (Monoid.isMonoid {zero} {zero} {!x!}))
+
 -- 5. Monics, Epis, and Zeros
 
