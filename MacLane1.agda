@@ -238,8 +238,7 @@ module Category3 where
 
 module Monoid-is-Category where
 
-  data * : Set where
-    tt : *
+  record * : Set where
 
   open import Algebra
   open import Algebra.Structures
@@ -267,5 +266,48 @@ module Monoid-is-Category where
         ; ≈-cong = IsSemigroup.∙-cong (IsMonoid.isSemigroup (Monoid.isMonoid x))
         }
 
--- 5. Monics, Epis, and Zeros
+--------------------------------
+-- 3. Functors
+--------------------------------
 
+{-
+  syntax sugars to improve readability
+    from : https://github.com/copumpkin/categories
+-}
+_[_,_] : ∀ {o ℓ e} → (C : Category o ℓ e) → (X : Category.Obj C) → (Y : Category.Obj C) → Set ℓ
+_[_,_] = Category.Hom
+
+_[_≈_] : ∀ {o ℓ e} → (C : Category o ℓ e) → ∀ {X Y} (f g : C [ X , Y ]) → Set e
+_[_≈_] = Category._≈_
+
+_[_o_] : ∀ {o ℓ e} → (C : Category o ℓ e) → ∀ {X Y Z} (f : C [ Y , Z ]) → (g : C [ X , Y ]) → C [ X , Z ]
+_[_o_] = Category._o_
+-- end of syntax sugars --
+
+record Functor 
+  {l1 l2 l3 m1 m2 m3 : Level} 
+  (C : Category l1 l2 l3) 
+  (B : Category m1 m2 m3) : Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)) where
+
+  -- syntax sugars
+  private module C = Category C
+  private module B = Category B
+
+  field
+    -- two suitably related functions.
+    Tₒ : C.Obj → B.Obj
+    Tₕ : {c c' : C.Obj} → C [ c , c' ] → B [ (Tₒ c) , (Tₒ c') ]
+    -- axioms of Functor
+    prop1 : {c : C.Obj} → B [ (Tₕ (C.id c)) ≈ (B.id (Tₒ c)) ]
+    prop2 : {a b c : C.Obj}{f : C [ a , b ]}{g : C [ b , c ]} 
+            → B [ Tₕ(C [ g o f ]) ≈ B [ Tₕ(g) o Tₕ(f) ] ]
+    --.{F-resp-≡} : ∀ {A B} {F G : C [ A , B ]} → C [ F ≡ G ] → D [ F₁ F ≡ F₁ G ]
+
+--------------------------------
+-- 4. Natural Transformations
+--------------------------------
+
+
+--------------------------------
+-- 5. Monics, Epis, and Zeros
+--------------------------------
