@@ -266,6 +266,40 @@ module Monoid-is-Category where
         ; ≈-cong = IsSemigroup.∙-cong (IsMonoid.isSemigroup (Monoid.isMonoid x))
         }
 
+open import Function using (_∘′_;_∋_)
+Sets : Category (suc zero) zero zero
+Sets = record
+        { Obj = Set zero
+        ; Hom = λ A B → (A → B)
+        ; _o_ = λ g f → g ∘′ f
+        ; id = λ A a → a
+        ; _≈_ = _≡_
+        ; assoc = refl
+        ; unitL = refl
+        ; unitR = refl
+        ; ≈-equiv = isEquivalence
+        ; ≈-cong = cong₂ (λ g f → g ∘′ f)
+        }
+
+open import Relation.Binary using (REL)
+open import Data.Product renaming (_,_ to _&_)
+ℝel : Category (suc zero) (suc zero) (suc zero)
+ℝel = record
+        { Obj = Set zero
+        ; Hom = λ X Y → REL X Y zero
+        ; _o_ = λ {X} {Y} {Z} S R → S ∘ᵣ R
+        ; id = {!!}
+        ; _≈_ = _≡_
+        ; assoc = {!!}
+        ; unitL = {!!}
+        ; unitR = {!!}
+        ; ≈-equiv = isEquivalence
+        ; ≈-cong = {!!}
+        }
+  where
+    data _∘ᵣ_ {X Y Z : Set} (S : REL Y Z zero) (R : REL X Y zero) (x : X) (z : Z) : Set where
+      Comp : {y : Y} {s : S y z} {r : R x y} → (S ∘ᵣ R) x z
+
 --------------------------------
 -- 3. Functors
 --------------------------------
@@ -301,13 +335,15 @@ record Functor
     prop1 : {c : C.Obj} → B [ (Tₕ (C.id c)) ≈ (B.id (Tₒ c)) ]
     prop2 : {a b c : C.Obj}{f : C [ a , b ]}{g : C [ b , c ]} 
             → B [ Tₕ(C [ g o f ]) ≈ B [ Tₕ(g) o Tₕ(f) ] ]
-    --.{F-resp-≡} : ∀ {A B} {F G : C [ A , B ]} → C [ F ≡ G ] → D [ F₁ F ≡ F₁ G ]
+    prop3 : ∀ {a b} {f g : C [ a , b ]} → C [ f ≈ g ] → B [ Tₕ f ≈ Tₕ g ]
 
 --------------------------------
 -- 4. Natural Transformations
 --------------------------------
-
-
+{-
+record NaturalTransformation {l1 l2 l3 m1 m2 m3 : Level} {C : Category l1 l2 l3} {B : Category m1 m2 m3} 
+  → (S T : Category : Set where
+-}
 --------------------------------
 -- 5. Monics, Epis, and Zeros
 --------------------------------
