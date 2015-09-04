@@ -281,24 +281,35 @@ Sets = record
         ; ≈-cong = cong₂ (λ g f → g ∘′ f)
         }
 
+{-
 open import Relation.Binary using (REL)
 open import Data.Product renaming (_,_ to _&_)
 ℝel : Category (suc zero) (suc zero) (suc zero)
 ℝel = record
         { Obj = Set zero
         ; Hom = λ X Y → REL X Y zero
-        ; _o_ = λ {X} {Y} {Z} S R → S ∘ᵣ R
-        ; id = {!!}
+        ; _o_ = _∘ᵣ_
+        ; id = λ A → RelId {A}
         ; _≈_ = _≡_
         ; assoc = {!!}
-        ; unitL = {!!}
+        ; unitL = {!!} --unitL-proof
         ; unitR = {!!}
         ; ≈-equiv = isEquivalence
         ; ≈-cong = {!!}
         }
   where
+    _∘ᵣ_ : {X Y Z : Set} {y : Y} → REL Y Z zero → REL X Y zero → REL X Z zero 
+    _∘ᵣ_ {X} {Y} {Z} {y} S R x z = S y z × R x y
+    {-
     data _∘ᵣ_ {X Y Z : Set} (S : REL Y Z zero) (R : REL X Y zero) (x : X) (z : Z) : Set where
       Comp : {y : Y} {s : S y z} {r : R x y} → (S ∘ᵣ R) x z
+    -}
+    data RelId {A : Set} (a : A) : A → Set where
+      Rel-refl : RelId a a
+
+    unitL-proof : {A B : Set} {f : REL A B zero} → RelId ∘ᵣ f ≡ f
+    unitL-proof {A} {B} {f} = {!!}
+-}
 
 --------------------------------
 -- 3. Functors
@@ -335,15 +346,28 @@ record Functor
     prop1 : {c : C.Obj} → B [ (Tₕ (C.id c)) ≈ (B.id (Tₒ c)) ]
     prop2 : {a b c : C.Obj}{f : C [ a , b ]}{g : C [ b , c ]} 
             → B [ Tₕ(C [ g o f ]) ≈ B [ Tₕ(g) o Tₕ(f) ] ]
+    -- additional axiom for _≈_
     prop3 : ∀ {a b} {f g : C [ a , b ]} → C [ f ≈ g ] → B [ Tₕ f ≈ Tₕ g ]
 
 --------------------------------
 -- 4. Natural Transformations
 --------------------------------
-{-
-record NaturalTransformation {l1 l2 l3 m1 m2 m3 : Level} {C : Category l1 l2 l3} {B : Category m1 m2 m3} 
-  → (S T : Category : Set where
--}
+record _⇴_
+  {l1 l2 l3 m1 m2 m3 : Level} 
+  {C : Category l1 l2 l3} 
+  {B : Category m1 m2 m3} 
+  (S T : Functor C B) : Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)) where
+  private module S = Functor S
+  private module T = Functor T
+  private module C = Category C
+  private module B = Category B
+  
+  field
+    τ : (c : C.Obj) → B [ S.Tₒ c , T.Tₒ c ]
+    -- commutative diagram
+    prop1 : {c c' : C.Obj} {f : C [ c , c' ]} 
+            → B [ B [ τ c' o S.Tₕ f ] ≈ B [ T.Tₕ f o τ c ] ]
+
 --------------------------------
 -- 5. Monics, Epis, and Zeros
 --------------------------------
