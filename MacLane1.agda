@@ -4,7 +4,7 @@
 -}
 module MacLane1 where
 
-open import Level
+open import Level public
 open import Relation.Binary using (IsEquivalence)
 open import Relation.Binary.PropositionalEquality
 
@@ -327,6 +327,9 @@ _[_≈_] = Category._≈_
 
 _[_o_] : ∀ {o ℓ e} → (C : Category o ℓ e) → ∀ {X Y Z} (f : C [ Y , Z ]) → (g : C [ X , Y ]) → C [ X , Z ]
 _[_o_] = Category._o_
+
+_[1_] : ∀ {o ℓ e} → (C : Category o ℓ e) → (X : Category.Obj C) → C [ X , X ]
+_[1_] = Category.id
 -- end of syntax sugars --
 
 record Functor 
@@ -352,7 +355,7 @@ record Functor
 --------------------------------
 -- 4. Natural Transformations
 --------------------------------
-record _⇴_
+record _∸>_
   {l1 l2 l3 m1 m2 m3 : Level} 
   {C : Category l1 l2 l3} 
   {B : Category m1 m2 m3} 
@@ -365,9 +368,37 @@ record _⇴_
   field
     τ : (c : C.Obj) → B [ S.Tₒ c , T.Tₒ c ]
     -- commutative diagram
-    prop1 : {c c' : C.Obj} {f : C [ c , c' ]} 
+    prop : {c c' : C.Obj} {f : C [ c , c' ]} 
             → B [ B [ τ c' o S.Tₕ f ] ≈ B [ T.Tₕ f o τ c ] ]
 
 --------------------------------
 -- 5. Monics, Epis, and Zeros
 --------------------------------
+open import Data.Product using (_×_)
+
+invertible : 
+  {l1 l2 l3 : Level} 
+  {C : Category l1 l2 l3}
+  {a b : Category.Obj C} → C [ a , b ] → Set (l2 ⊔ l3)
+invertible {l1}{l2}{l3}{C}{a}{b} e 
+ = (e' : C [ b , a ]) → C [ C [ e' o e ] ≈ C [1 a ] ] × C [ C [ e o e' ] ≈ C [1 b ] ]
+
+isomorphic :
+  {l1 l2 l3 : Level} 
+  {C : Category l1 l2 l3}
+  (a b : Category.Obj C) → Set (l2 ⊔ l3)
+isomorphic {l1}{l2}{l3}{C} a b = (e : C [ a , b ]) → invertible {l1}{l2}{l3}{C}{a}{b} e
+
+monic : 
+  {l1 l2 l3 : Level} 
+  {C : Category l1 l2 l3}
+  {a b : Category.Obj C} → C [ a , b ] → Set (l1 ⊔ l2 ⊔ l3)
+monic {l1}{l2}{l3}{C}{a}{b} m
+ = {d : Category.Obj C} (f₁ f₂ : C [ d , a ]) → C [ C [ m o f₁ ] ≈ C [ m o f₂ ] ] → C [ f₁ ≈ f₂ ]
+
+epi : 
+  {l1 l2 l3 : Level} 
+  {C : Category l1 l2 l3}
+  {a b : Category.Obj C} → C [ a , b ] → Set (l1 ⊔ l2 ⊔ l3)
+epi {l1}{l2}{l3}{C}{a}{b} h
+ = {c : Category.Obj C} (g₁ g₂ : C [ b , c ]) → C [ C [ g₁ o h ] ≈ C [ g₂ o h ] ] → C [ g₁ ≈ g₂ ]
