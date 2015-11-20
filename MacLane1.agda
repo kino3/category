@@ -366,10 +366,10 @@ record _∸>_
   private module B = Category B
   
   field
-    τ : (c : C.Obj) → B [ S.Tₒ c , T.Tₒ c ]
+    func : (c : C.Obj) → B [ S.Tₒ c , T.Tₒ c ]
     -- commutative diagram
-    prop : {c c' : C.Obj} {f : C [ c , c' ]} 
-            → B [ B [ τ c' o S.Tₕ f ] ≈ B [ T.Tₕ f o τ c ] ]
+    commute : {c c' : C.Obj} {f : C [ c , c' ]} 
+            → B [ B [ func c' o S.Tₕ f ] ≈ B [ T.Tₕ f o func c ] ]
 
 --------------------------------
 -- 5. Monics, Epis, and Zeros

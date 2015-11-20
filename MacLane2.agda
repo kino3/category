@@ -44,11 +44,13 @@ _∙_ : {l1 l2 l3 m1 m2 m3 : Level}
       {R S T : Functor C B} → 
       S ∸> T → R ∸> S → R ∸> T
 _∙_ {C = C} {B = B} τ σ = record 
-  { τ = λ c → B [ (_∸>_.τ τ c) o _∸>_.τ σ c ] ; 
-    prop = {!!} }
+  { func = λ c → B [ τ.func c o σ.func c ] ; 
+    commute = λ {c} {c'} {f} → {!!} }
   where
     private module B = Category B
     private module τ = _∸>_ τ
+    private module σ = _∸>_ σ
+
 ---------------------------------------
 -- 5. The Category of All Categories
 ---------------------------------------
