@@ -371,6 +371,19 @@ record _∸>_
     commute : {c c' : C.Obj} {f : C [ c , c' ]} 
             → B [ B [ func c' o S.Tₕ f ] ≈ B [ T.Tₕ f o func c ] ]
 
+{-
+components-of_ : {l1 l2 l3 m1 m2 m3 : Level} 
+  {C : Category l1 l2 l3} {B : Category m1 m2 m3} 
+  {S T : Functor C B} {c : Category.Obj C} → 
+  (S ∸> T) → B [ Functor.Tₒ S c , Functor.Tₒ T c ]
+components-of τ = {!!}
+-}
+Natural : {l1 l2 l3 m1 m2 m3 : Level} 
+  {C : Category l1 l2 l3} {B : Category m1 m2 m3} 
+  {S T : Functor C B} (c : Category.Obj C) 
+  → B [ Functor.Tₒ S c , Functor.Tₒ T c ] → Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3))
+Natural {S = S} {T = T} c τ = S ∸> T
+
 --------------------------------
 -- 5. Monics, Epis, and Zeros
 --------------------------------
