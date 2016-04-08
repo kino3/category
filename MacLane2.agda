@@ -15,12 +15,15 @@ open import MacLane1
 ---------------------------------------
 -- 3. Products of Categories
 ---------------------------------------
-open import Data.Product renaming (_×_ to _x_)
-_×_ : {l1 l2 l3 m1 m2 m3 : Level} → Category l1 l2 l3 → Category m1 m2 m3 → Category {!!} {!!} {!!}
+open import Data.Product renaming (_×_ to _x_; _,_ to ⟨_,_⟩)
+_×_ : {l1 l2 l3 m1 m2 m3 : Level} 
+  → Category l1 l2 l3 → Category m1 m2 m3 
+  → Category (l1 ⊔ m1) (l2 ⊔ m2) (l3 ⊔ m3)
 B × C = record
           { Obj = B.Obj x C.Obj
-          ; Hom = λ bc b'c' → B.Hom (proj₁ bc) (proj₁ b'c') x C.Hom (proj₂ bc) (proj₂ b'c')
-          ; _o_ = λ {bc} {b'c'} {b''c''} fg f'g' → {!!}
+          ; Hom = λ { ⟨ b , c ⟩ ⟨ b' , c' ⟩ → B.Hom b b' x C.Hom c c' }
+          ; _o_ = λ { {⟨ b , c ⟩} {⟨ b' , c' ⟩} {⟨ b'' , c'' ⟩} 
+                      ⟨ f' , g' ⟩ ⟨ f , g ⟩ → ⟨ B._o_ f' f , C._o_ g' g ⟩ }
           ; id = {!!}
           ; _≈_ = {!!}
           ; assoc = {!!}
