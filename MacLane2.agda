@@ -24,7 +24,7 @@ B × C = record
           ; Hom = λ { ⟨ b , c ⟩ ⟨ b' , c' ⟩ → B.Hom b b' x C.Hom c c' }
           ; _o_ = λ { {⟨ b , c ⟩} {⟨ b' , c' ⟩} {⟨ b'' , c'' ⟩} 
                       ⟨ f' , g' ⟩ ⟨ f , g ⟩ → ⟨ B._o_ f' f , C._o_ g' g ⟩ }
-          ; id = {!!}
+          ; id = λ { ⟨ b , c ⟩ → ⟨ B.id b , C.id c ⟩ }
           ; _≈_ = {!!}
           ; assoc = {!!}
           ; unitL = {!!}
