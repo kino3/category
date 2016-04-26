@@ -1,4 +1,4 @@
-module Category where
+module Definition.Category where
 open import Level
 open import Relation.Binary using (Setoid)
 
