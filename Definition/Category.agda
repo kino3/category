@@ -38,3 +38,9 @@ record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
     definition : RawCategory l1 l2 l3
     axioms     : IsCategory definition
 
+  -- for convenience
+  private
+    module C = RawCategory definition
+  Obj = C.Obj 
+  Hom = C.Hom 
+  _o_ = C._o_ 
