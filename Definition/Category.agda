@@ -44,3 +44,5 @@ record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
   Obj = C.Obj 
   Hom = C.Hom 
   _o_ = C._o_ 
+  _≈_ = C._≈_
+  id  = C.Id
