@@ -1,7 +1,6 @@
 module Definition.Functor where
 open import Level
 open import Definition.Category
-open import Data.String
 
 record RawFunctor 
   {l1 l2 l3 m1 m2 m3 : Level} 
@@ -41,10 +40,13 @@ record IsFunctor
     comp : {a b c : C.Obj} {f : C.Hom [ a , b ]} {g : C.Hom [ b , c ]}
            → T.a (g ∘ᶜ f) ≈ (T.a g ∘ᵇ T.a f)
 
-record Functor (l1 l2 l3 m1 m2 m3 : Level)
-  {C : Category l1 l2 l3} 
-  {B : Category m1 m2 m3}
+record Functor {l1 l2 l3 m1 m2 m3 : Level}
+  (C : Category l1 l2 l3) 
+  (B : Category m1 m2 m3)
   : Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)) where
   field
     definition : RawFunctor C B 
     axioms     : IsFunctor definition
+
+  o = RawFunctor.o definition
+  a = RawFunctor.a definition
