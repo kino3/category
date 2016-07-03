@@ -3,10 +3,6 @@ module Category.Sets where
 open import Definition.Category
 import Relation.Binary.PropositionalEquality as PropEq
 
--- move?
---[_] : {l m : Level} → Setoid l m → Set l
---[ record { Carrier = Carrier ; _≈_ = _≈_ ; isEquivalence = isEquivalence } ] = Carrier
-
 Sets : Category (suc zero) zero zero
 Sets = record {
      definition = record {

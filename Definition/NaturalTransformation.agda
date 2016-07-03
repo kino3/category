@@ -6,32 +6,32 @@ open import Definition.Functor
 
 record RawNaturalTransformation
   {l1 l2 l3 m1 m2 m3 : Level} 
-  {C : Category l1 l2 l3} 
-  {B : Category m1 m2 m3}
-  (S T : Functor C B) : Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)) where
+  {C : RawCategory l1 l2 l3} 
+  {B : RawCategory m1 m2 m3}
+  (S T : RawFunctor C B) : Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)) where
 
   private
-    module C = Category C
-    module B = Category B
-    module S = Functor S
-    module T = Functor T
+    module C = RawCategory C
+    module B = RawCategory B
+    module S = RawFunctor S
+    module T = RawFunctor T
 
   field
     τ : (c : C.Obj) → B.Hom [ S.o c , T.o c ]
 
 record IsNaturalTransformation
   {l1 l2 l3 m1 m2 m3 : Level}
-  {C : Category l1 l2 l3} 
-  {B : Category m1 m2 m3}
-  {S T : Functor C B}
+  {C : RawCategory l1 l2 l3} 
+  {B : RawCategory m1 m2 m3}
+  {S T : RawFunctor C B}
   (rN : RawNaturalTransformation S T)
   : Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)) where
 
   private
-    module S = Functor S
-    module T = Functor T
-    module B = Category B
-    module C = Category C
+    module S = RawFunctor S
+    module T = RawFunctor T
+    module B = RawCategory B
+    module C = RawCategory C
     τ = RawNaturalTransformation.τ rN
     _≈_ = B._≈_
     _∘_ = B._o_
@@ -47,7 +47,12 @@ record _∸>_  (l1 l2 l3 m1 m2 m3 : Level)
   (S T : Functor C B)
   : Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)) where
   field
-    definition : RawNaturalTransformation S T 
+    definition : RawNaturalTransformation (Functor.definition S)
+                                          (Functor.definition T) 
     axioms     : IsNaturalTransformation definition
+
+  -- for convenience
+  τ = RawNaturalTransformation.τ definition
+  commute = IsNaturalTransformation.commute axioms
 
 
