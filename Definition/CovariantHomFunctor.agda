@@ -44,9 +44,9 @@ CovariantHomFunctor C a =
       }
   }
   where
-    id-proof : {a b : Obj[ C ]} →
+    id-proof : {b : Obj[ C ]} →
       (λ (f : Hom C [ a , b ]) → (Hom C [ C [1 b ] ∘ f ])) ≡ ((λ f → f))
-    id-proof {a} {b} = {!!}
+    id-proof {b} = IsCategory.unitL (Category.axioms {!Sets!})
 
 -- in general
 {-
