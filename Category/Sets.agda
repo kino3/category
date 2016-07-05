@@ -15,7 +15,8 @@ Sets = record {
      axioms = record {
         assoc = PropEq.refl ;
         unitL = PropEq.refl ;
-        unitR = PropEq.refl
+        unitR = PropEq.refl ;
+        ≈-cong = PropEq.cong₂ (λ b→c a→b a → b→c (a→b a)) 
      }
  }
    where
