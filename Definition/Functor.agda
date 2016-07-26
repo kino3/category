@@ -2,15 +2,15 @@ module Definition.Functor where
 open import Level
 open import Definition.Category
 
-record RawFunctor 
+record Functor 
   {l1 l2 l3 m1 m2 m3 : Level} 
-  (C : RawCategory l1 l2 l3) 
-  (B : RawCategory m1 m2 m3)
+  (C : Category l1 l2 l3) 
+  (B : Category m1 m2 m3)
   : Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)) where
 
   private
-    module C = RawCategory C
-    module B = RawCategory B
+    module C = Category C
+    module B = Category B
   _≈_ = B._≈_
 
   field
@@ -19,9 +19,20 @@ record RawFunctor
                C.Hom [ c , c' ] → B.Hom [ Obj-func c , Obj-func c' ]
 
   --syntax sugar
-  o = Obj-func
-  a = Arrow-func
+  To = Obj-func
+  Ta = Arrow-func
 
+  private
+    _∘ᵇ_ = B._o_
+    _∘ᶜ_ = C._o_
+   
+  field
+    id   : {c : C.Obj} → Ta (C.Id c) ≈ B.Id (To c)
+    comp : {a b c : C.Obj} {f : C.Hom [ a , b ]} {g : C.Hom [ b , c ]}
+           → Ta (g ∘ᶜ f) ≈ (Ta g ∘ᵇ Ta f)
+
+
+{-
 record IsFunctor 
   {l1 l2 l3 m1 m2 m3 : Level}
   {C : RawCategory l1 l2 l3} 
@@ -52,4 +63,4 @@ record Functor {l1 l2 l3 m1 m2 m3 : Level}
 
   o = RawFunctor.o definition
   a = RawFunctor.a definition
-
+-}
