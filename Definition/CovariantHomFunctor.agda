@@ -34,7 +34,7 @@ _[1_] : ∀ {o ℓ e}
 C [1 c ] = (Category.Id C) c
 
 CovariantHomFunctor : {l1 l2 l3 : Level}
-  (C : Category l1 {!!} {!!}) →
+  (C : Category {!!} {!!} {!!}) →
    Obj[ C ] → Functor C Sets
 CovariantHomFunctor {l1} {l2} {l3} C a =
  record { Obj-func = λ b → C [ a , b ] ;
@@ -50,12 +50,22 @@ CovariantHomFunctor {l1} {l2} {l3} C a =
    id-proof {c} =
      begin 
        (λ (f : C [ a , c ]) → C [ C [1 c ] ∘ f ])
-     ≡⟨ {!!} ⟩ -- unitL (Id b o f) ≈ f cong?subst?
+     ≡⟨ {!!} ⟩ -- unitL (Id b o f) ≈ f cong? subst?
        (λ (f : C [ a , c ]) → f)
      ≡⟨ PropEq.refl ⟩ 
        ((Sets [1 (C [ a , c ]) ]))
      ∎
-     where
-       hoge : ∀ {A : Set} (f g : A → A) → f ≡ (λ a → a) → g ≡ (λ a → a) → f ≡ g
-       hoge f g prff prfg = PropEq.trans prff (PropEq.sym prfg)
-   
+
+open import Data.Nat
+g : ℕ → ℕ
+g n = n + 4
+
+h : ℕ → ℕ
+h n = 4 + n
+
+hoge : g ≡ h
+hoge = {!!}
+  where
+    flip : ∀ n → n + 4 ≡ 4 + n
+    flip ℕ.zero = PropEq.refl
+    flip (ℕ.suc n) rewrite flip n = PropEq.refl
