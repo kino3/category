@@ -3,14 +3,15 @@ module Category.Sets where
 open import Definition.Category
 import Relation.Binary.PropositionalEquality as PropEq
 import Function.Equality as Feq
- 
+import Relation.Binary as B
+
 Sets : (c l : Level) → Category (suc (c ⊔ l)) ((c ⊔ l)) ((c ⊔ l))
 Sets c l = record
          { Obj = Setoid c l
-         ; Hom = λ (X Y : Setoid c l) → X Feq.⇨ Y
-         ; _o_ = {!!}
-         ; Id = {!!}
-         ; assoc = {!!}
+         ; Hom = Feq._⇨_
+         ; _o_ = Feq._∘_
+         ; Id  = λ (X : Setoid c l) → Feq.id
+         ; assoc = {!!} --B.IsEquivalence.refl (Setoid.isEquivalence {!!})
          ; unitL = {!!}
          ; unitR = {!!}
          ; ≈-cong = {!!}
