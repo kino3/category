@@ -24,8 +24,8 @@ record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
             → (k o (g o f)) ≈ ((k o g) o f)
     unitL   : {a b : Obj} {f : Hom [ a , b ]} → (Id b o f) ≈ f
     unitR   : {b c : Obj} {g : Hom [ b , c ]} → (g o Id b) ≈ g
-    ≈-cong  : ∀ {a b c} {f1 f2 : Hom [ b , c ]} {g1 g2 : Hom [ a , b ]} 
-            → f1 ≈ f2 → g1 ≈ g2 → (f1 o g1) ≈ (f2 o g2)  
+    ≈-cong  : ∀ {a b c} {f1 f2 : Hom [ a , b ]} {g1 g2 : Hom [ b , c ]} 
+            → f1 ≈ f2 → g1 ≈ g2 → (g1 o f1) ≈ (g2 o f2)  
 
   infix   1 _≈_
   infixl 10 _o_
