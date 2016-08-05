@@ -1,6 +1,7 @@
 module Definition.Category where
 open import Level public
 open import Relation.Binary using (Setoid) public
+import Relation.Binary as B
 
 _[_,_] : ∀ {a b c} {X : Set a} 
   → (h : X → X → Setoid b c) → X → X → Set b

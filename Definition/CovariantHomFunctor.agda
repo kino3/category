@@ -34,19 +34,36 @@ _[1_] : ∀ {o ℓ e}
 C [1 c ] = (Category.Id C) c
 
 CovariantHomFunctor : {l1 l2 l3 : Level}
-  (C : Category {!!} {!!} {!!}) →
-   Obj[ C ] → Functor C Sets
+  (C : Category l1 l2 l3) →
+   Obj[ C ] → Functor C (Sets {!!} {!!})
 CovariantHomFunctor {l1} {l2} {l3} C a =
- record { Obj-func = λ b → C [ a , b ] ;
+  record { Obj-func = λ b
+              → record {
+                     Carrier = C [ a , b ] ;
+                     _≈_ = Category._≈_ C ;
+                     isEquivalence = Setoid.isEquivalence (Category.Hom C a b) };
+           Arrow-func = λ {c} {c'}
+                      → λ (k : C [ c , c' ])
+                      → record {
+                         _⟨$⟩_ = λ (f : C [ a , c ]) → C [ k ∘ f ] ;
+                         cong = λ {f1} {f2} f1≈f2
+                           → Category.≈-cong C f1≈f2
+                                           (Setoid.refl (Category.Hom C c c')) };
+           id = {!!} ;
+           comp = {!!} }
+{-
+  record { Obj-func = λ b → C [ a , b ] ;
           Arrow-func = λ {c} {c'}
                      → λ (k : C [ c , c' ])
                      → λ (f : C [ a , c ])
                      →  C [ k ∘ f ] ;
-          id   = id-proof;
+          id   = ?;
           comp = {!!} }
+-}
  where
+   {-
    id-proof : {c : Category.Obj C}
-     → (λ f → C [ C [1 c ] ∘ f ]) ≡ (Sets [1 (C [ a , c ]) ]) 
+     → (λ f → C [ C [1 c ] ∘ f ]) ≡ ((Sets ? ?) [1 (C [ a , c ]) ]) 
    id-proof {c} =
      begin 
        (λ (f : C [ a , c ]) → C [ C [1 c ] ∘ f ])
@@ -55,7 +72,7 @@ CovariantHomFunctor {l1} {l2} {l3} C a =
      ≡⟨ PropEq.refl ⟩ 
        ((Sets [1 (C [ a , c ]) ]))
      ∎
-
+   -}
 open import Data.Nat
 g : ℕ → ℕ
 g n = n + 4
