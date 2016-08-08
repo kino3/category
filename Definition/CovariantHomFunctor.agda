@@ -48,7 +48,7 @@ CovariantHomFunctor {l1} {l2} {l3} C a =
                            → Category.≈-cong C f1≈f2
                                            (Setoid.refl (Category.Hom C c c')) };
            id = id-proof;
-           comp = {!!} }
+           comp = comp-proof }
  where
    id-proof : {c : Category.Obj C} {f g : C [ a , c ]}
       → C [ f ≈ g ]
@@ -61,5 +61,20 @@ CovariantHomFunctor {l1} {l2} {l3} C a =
      ≈⟨ f≈g ⟩
        g
      ∎
-     where
-       open EqR (Category.Hom C a c) -- this ≈ is under Hom[a,c]
+     where open EqR (Category.Hom C a c) -- this ≈ is under Hom[a,c]
+
+   comp-proof : {a : Category.Obj C} {b c : Category.Obj C}
+      {f : C [ a , b ]}
+      {g : C [ b , c ]}
+      {x y : C [ _ , a ]} →
+      C [ x ≈ y ] →
+      C [ (C [ (C [ g ∘ f ]) ∘ x ]) ≈ (C [ g ∘ (C [ f ∘ y ]) ]) ]
+   comp-proof {a} {b} {c} {f} {g} {x} {y} x≈y =
+     begin
+       (C [ (C [ g ∘ f ]) ∘ x ])
+     ≈⟨ {!!} ⟩
+       (((C [ g ∘ (C [ f ∘ x ]) ])))
+     ≈⟨ {!!} ⟩
+       ((C [ g ∘ (C [ f ∘ y ]) ]))
+     ∎
+     where open EqR (Category.Hom C _ c)
