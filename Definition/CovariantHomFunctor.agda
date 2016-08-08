@@ -3,10 +3,7 @@ module Definition.CovariantHomFunctor where
 open import Definition.Category hiding (_[_,_])
 open import Definition.Functor
 open import Category.Sets
-import Relation.Binary.PropositionalEquality as PropEq
-open PropEq using (_≡_)
-open PropEq.≡-Reasoning
-
+import Relation.Binary.EqReasoning as EqR
 
 -- FIXME : move to Util.Notation?
 Obj[_] : {l1 l2 l3 : Level} → Category l1 l2 l3 → Set l1
@@ -35,12 +32,13 @@ C [1 c ] = (Category.Id C) c
 
 CovariantHomFunctor : {l1 l2 l3 : Level}
   (C : Category l1 l2 l3) →
-   Obj[ C ] → Functor C (Sets {!!} {!!})
+   Obj[ C ] → Functor C (Sets l2 l3)
 CovariantHomFunctor {l1} {l2} {l3} C a =
   record { Obj-func = λ b
               → record {
                      Carrier = C [ a , b ] ;
                      _≈_ = Category._≈_ C ;
+                     -- TODO: refinement for readability.
                      isEquivalence = Setoid.isEquivalence (Category.Hom C a b) };
            Arrow-func = λ {c} {c'}
                       → λ (k : C [ c , c' ])
@@ -49,40 +47,19 @@ CovariantHomFunctor {l1} {l2} {l3} C a =
                          cong = λ {f1} {f2} f1≈f2
                            → Category.≈-cong C f1≈f2
                                            (Setoid.refl (Category.Hom C c c')) };
-           id = {!!} ;
+           id = id-proof;
            comp = {!!} }
-{-
-  record { Obj-func = λ b → C [ a , b ] ;
-          Arrow-func = λ {c} {c'}
-                     → λ (k : C [ c , c' ])
-                     → λ (f : C [ a , c ])
-                     →  C [ k ∘ f ] ;
-          id   = ?;
-          comp = {!!} }
--}
  where
-   {-
-   id-proof : {c : Category.Obj C}
-     → (λ f → C [ C [1 c ] ∘ f ]) ≡ ((Sets ? ?) [1 (C [ a , c ]) ]) 
-   id-proof {c} =
-     begin 
-       (λ (f : C [ a , c ]) → C [ C [1 c ] ∘ f ])
-     ≡⟨ {!!} ⟩ -- unitL (Id b o f) ≈ f cong? subst?
-       (λ (f : C [ a , c ]) → f)
-     ≡⟨ PropEq.refl ⟩ 
-       ((Sets [1 (C [ a , c ]) ]))
+   id-proof : {c : Category.Obj C} {f g : C [ a , c ]}
+      → C [ f ≈ g ]
+      → C [ (C [ C [1 c ] ∘ f ]) ≈ g ] 
+   id-proof {c} {f} {g} f≈g =
+     begin
+       ((C [ C [1 c ] ∘ f ]))
+     ≈⟨ Category.unitL C ⟩
+       f
+     ≈⟨ f≈g ⟩
+       g
      ∎
-   -}
-open import Data.Nat
-g : ℕ → ℕ
-g n = n + 4
-
-h : ℕ → ℕ
-h n = 4 + n
-
-hoge : g ≡ h
-hoge = {!!}
-  where
-    flip : ∀ n → n + 4 ≡ 4 + n
-    flip ℕ.zero = PropEq.refl
-    flip (ℕ.suc n) rewrite flip n = PropEq.refl
+     where
+       open EqR (Category.Hom C a c) -- this ≈ is under Hom[a,c]
