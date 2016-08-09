@@ -80,3 +80,5 @@ CovariantHomFunctor {l1} {l2} {l3} C a =
        ((C [ g ∘ (C [ f ∘ y ]) ]))
      ∎
      where open EqR (Category.Hom C _ c)
+
+syntax CovariantHomFunctor C a = C [ a ,-]
