@@ -31,6 +31,7 @@ record Functor
     comp : {a b c : C.Obj} {f : C.Hom [ a , b ]} {g : C.Hom [ b , c ]}
            → Ta (g ∘ᶜ f) ≈ (Ta g ∘ᵇ Ta f)
 
+syntax Functor C B = C ⟶ B
 
 {-
 record IsFunctor 
