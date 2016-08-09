@@ -72,9 +72,11 @@ CovariantHomFunctor {l1} {l2} {l3} C a =
    comp-proof {a} {b} {c} {f} {g} {x} {y} x≈y =
      begin
        (C [ (C [ g ∘ f ]) ∘ x ])
-     ≈⟨ {!!} ⟩
-       (((C [ g ∘ (C [ f ∘ x ]) ])))
-     ≈⟨ {!!} ⟩
+     ≈⟨ Setoid.sym (Category.Hom C _ c) (Category.assoc C) ⟩
+       ((C [ g ∘ (C [ f ∘ x ]) ]))
+     ≈⟨ Category.≈-cong C (Category.≈-cong C
+          x≈y (Setoid.refl (Category.Hom C a b)))
+             ((Setoid.refl (Category.Hom C b c))) ⟩
        ((C [ g ∘ (C [ f ∘ y ]) ]))
      ∎
      where open EqR (Category.Hom C _ c)
