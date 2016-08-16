@@ -17,28 +17,24 @@ record NaturalTransformation
     module T = Functor T
 
   field
-    τ : (c : C.Obj) → B.Hom [ S.To c , T.To c ]
+    τ : (c : C.Obj) → B.Hom [ S.fo c , T.fo c ]
 
   _≈_ = B._≈_
   _∘_ = B._o_
    
   field
     commute : {c c' : C.Obj} {f : C.Hom [ c , c' ]}
-            → (τ c' ∘ S.Ta f) ≈ (T.Ta f ∘ τ c)
+            → (τ c' ∘ S.fa f) ≈ (T.fa f ∘ τ c)
 
 syntax NaturalTransformation S T = S ∸> T
-{-
-record _∸>_  (l1 l2 l3 m1 m2 m3 : Level)
-  {l1 l2 l3 m1 m2 m3 : Level}
+
+open import Relation.Binary.PropositionalEquality using (_≡_)
+NaturalTransformation' :
+  {l1 l2 l3 m1 m2 m3 : Level} 
   {C : Category l1 l2 l3} 
   {B : Category m1 m2 m3}
-  (S T : Functor C B)
-  : Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)) where
-  field
-    definition : RawNaturalTransformation (Functor.definition S)
-                                          (Functor.definition T) 
-    axioms     : IsNaturalTransformation definition
-
-
--}
-
+  (S T : Functor C B) → Setoid _ _
+NaturalTransformation' {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} S T =
+  record { Carrier = NaturalTransformation S T ;
+           _≈_ = {!!} ;
+           isEquivalence = {!!} }

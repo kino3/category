@@ -3,67 +3,56 @@ open import Level public
 open import Relation.Binary using (Setoid) public
 import Relation.Binary as B
 
-_[_,_] : ∀ {a b c} {X : Set a} 
+_[_,_]' : ∀ {a b c} {X : Set a} 
   → (h : X → X → Setoid b c) → X → X → Set b
-h [ x , y ] = Setoid.Carrier (h x y)
-
+h [ x , y ]' = Setoid.Carrier (h x y)
 
 record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
   field
     Obj : Set l1
     Hom : Obj → Obj → Setoid l2 l3
-    _o_ : {a b c : Obj} → Hom [ b , c ] → Hom [ a , b ] → Hom [ a , c ]
-    Id  : (a : Obj) → Hom [ a , a ]
+    _o_ : {a b c : Obj} → Hom [ b , c ]' → Hom [ a , b ]' → Hom [ a , c ]'
+    Id  : (a : Obj) → Hom [ a , a ]'
 
   -- for convenience  
-  _≈_ : {a b : Obj} → Hom [ a , b ] → Hom [ a , b ] → Set l3
+  _≈_ : {a b : Obj} → Hom [ a , b ]' → Hom [ a , b ]' → Set l3
   _≈_ {a} {b} p q = Setoid._≈_ (Hom a b) p q
 
   field
-    assoc   : {a b c d : Obj} {f : Hom [ a , b ]} 
-              {g : Hom [ b , c ]} {k : Hom [ c , d ]}
+    assoc   : {a b c d : Obj} {f : Hom [ a , b ]'} 
+              {g : Hom [ b , c ]'} {k : Hom [ c , d ]'}
             → (k o (g o f)) ≈ ((k o g) o f)
-    unitL   : {a b : Obj} {f : Hom [ a , b ]} → (Id b o f) ≈ f
-    unitR   : {b c : Obj} {g : Hom [ b , c ]} → (g o Id b) ≈ g
-    ≈-cong  : ∀ {a b c} {f1 f2 : Hom [ a , b ]} {g1 g2 : Hom [ b , c ]} 
+    unitL   : {a b : Obj} {f : Hom [ a , b ]'} → (Id b o f) ≈ f
+    unitR   : {b c : Obj} {g : Hom [ b , c ]'} → (g o Id b) ≈ g
+    ≈-cong  : ∀ {a b c} {f1 f2 : Hom [ a , b ]'} {g1 g2 : Hom [ b , c ]'} 
             → f1 ≈ f2 → g1 ≈ g2 → (g1 o f1) ≈ (g2 o f2)  
 
   infix   1 _≈_
   infixl 10 _o_
   infix  20 Id
 
-{-
-record IsCategory {l1 l2 l3 : Level} (rC : RawCategory l1 l2 l3) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
+-- Utility for improving readability
 
-  private 
-   module C = RawCategory rC
-   Obj = C.Obj
-   Hom = C.Hom
-   _o_ = C._o_
-   id  = C.Id
-   _≈_ = C._≈_
+Obj[_] : {l1 l2 l3 : Level} → Category l1 l2 l3 → Set l1
+Obj[ C ] = Category.Obj C
 
-  field
-    assoc   : {a b c d : Obj} {f : Hom [ a , b ]} 
-              {g : Hom [ b , c ]} {k : Hom [ c , d ]}
-            → (k o (g o f)) ≈ ((k o g) o f)
-    unitL   : {a b : Obj} {f : Hom [ a , b ]} → (id b o f) ≈ f
-    unitR   : {b c : Obj} {g : Hom [ b , c ]} → (g o id b) ≈ g
-    ≈-cong  : ∀ {a b c} {f1 f2 : Hom [ b , c ]} {g1 g2 : Hom [ a , b ]} 
-            → f1 ≈ f2 → g1 ≈ g2 → (f1 o g1) ≈ (f2 o g2)  
-    
-record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
-  field
-    definition : RawCategory l1 l2 l3
-    axioms     : IsCategory definition
--}
-  -- for convenience
-  {-
-  private
-    module C = RawCategory definition
-  Obj = C.Obj 
-  Hom = C.Hom 
-  _o_ = C._o_ 
-  _≈_ = C._≈_
-  id  = C.Id
-  -}
+_[_,_] :
+    {l1 l2 l3 : Level}
+  → (C : Category l1 l2 l3)
+  → Obj[ C ] → Obj[ C ] → Set l2
+C [ x , y ] =
+  Setoid.Carrier
+    (Category.Hom C x y)
+
+_[_∘_] : ∀ {o ℓ e} → (C : Category o ℓ e)
+       → ∀ {X Y Z} → (C [ Y , Z ]) → (C [ X , Y ])
+       → C [ X , Z ]
+_[_∘_] = Category._o_ 
+
+_[_≈_] : ∀ {o ℓ e} → (C : Category o ℓ e)
+       → ∀ {X Y} → (f g : C [ X , Y ]) → Set e
+_[_≈_] = Category._≈_
+
+_[1_] : ∀ {o ℓ e}
+       → (C : Category o ℓ e) → (X : Obj[ C ]) → C [ X , X ]
+C [1 c ] = (Category.Id C) c

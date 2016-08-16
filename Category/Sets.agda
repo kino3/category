@@ -23,15 +23,15 @@ Sets c l = record
          }
    where
      -- 冗長だが、思い出し用に残す
-     assoc-proof : {A B C D : Setoid c l} {f : Feq._⇨_ [ A , B ]}
-                  {g : Feq._⇨_ [ B , C ]} {h : Feq._⇨_ [ C , D ]}
+     assoc-proof : {A B C D : Setoid c l}  {f : Feq._⇨_ [ A , B ]'}
+                  {g : Feq._⇨_ [ B , C ]'} {h : Feq._⇨_ [ C , D ]'}
                   {x y : Setoid.Carrier A} →
       (A Setoid.≈ x) y →
       (D Setoid.≈ h Feq.⟨$⟩ (g Feq.⟨$⟩ (f Feq.⟨$⟩ x)))
       (h Feq.⟨$⟩ (g Feq.⟨$⟩ (f Feq.⟨$⟩ y)))
      assoc-proof {A} {B} {C} {D} {f} {g} {h} = Feq.cong (h Feq.∘ g Feq.∘ f)
 
-     unitL-proof : {A B : Setoid c l} {f : Feq._⇨_ [ A , B ]}
+     unitL-proof : {A B : Setoid c l} {f : Feq._⇨_ [ A , B ]'}
       {x y : Setoid.Carrier A} →
       (A Setoid.≈ x) y → (B Setoid.≈ f Feq.⟨$⟩ x) (f Feq.⟨$⟩ y)
      unitL-proof {A} {B} {f} {x} {y} = Feq.cong f
