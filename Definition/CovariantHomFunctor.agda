@@ -1,12 +1,9 @@
 module Definition.CovariantHomFunctor where
 
-open import Definition.Category hiding (_[_,_])
+open import Definition.Category
 open import Definition.Functor
 open import Category.Sets
 import Relation.Binary.EqReasoning as EqR
-
--- FIXME : move to Util.Notation?
-
 
 CovariantHomFunctor : {l1 l2 l3 : Level}
   (C : Category l1 l2 l3) →

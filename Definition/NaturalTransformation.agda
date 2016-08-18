@@ -17,17 +17,18 @@ record NaturalTransformation
     module T = Functor T
 
   field
-    τ : (c : C.Obj) → B.Hom [ S.fo c , T.fo c ]
+    τ : (c : C.Obj) → B [ S.fo c , T.fo c ]
 
   _≈_ = B._≈_
   _∘_ = B._o_
    
   field
-    commute : {c c' : C.Obj} {f : C.Hom [ c , c' ]}
+    commute : {c c' : C.Obj} {f : C [ c , c' ]}
             → (τ c' ∘ S.fa f) ≈ (T.fa f ∘ τ c)
 
 syntax NaturalTransformation S T = S ∸> T
 
+{-
 open import Relation.Binary.PropositionalEquality using (_≡_)
 NaturalTransformation' :
   {l1 l2 l3 m1 m2 m3 : Level} 
@@ -38,3 +39,4 @@ NaturalTransformation' {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} S T =
   record { Carrier = NaturalTransformation S T ;
            _≈_ = {!!} ;
            isEquivalence = {!!} }
+-}

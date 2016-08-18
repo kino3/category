@@ -7,6 +7,23 @@ open import Definition.CovariantHomFunctor
 open import Category.Sets
 import Function.Bijection as FB
 
+open import Definition.Universal
+open import Data.Product
+-- on MacLane P.59
+
+
+_iff_ : ∀ {m n} → Set m → Set n → Set _
+P iff Q = (P → Q) × (Q → P)
+
+Proposition1 : ∀ {l1 l2 l3 m1 m2 m3} →
+  {D : Category l1 l2 l3} {C : Category m1 m2 m3}
+  {c : Obj[ C ]} {d : Obj[ D ]} → (S : D ⟶ C) → 
+  (universal-from c to S) → FB.Bijection {!!} {!!}
+Proposition1 u = {!!}
+
+-- (λ (f' : D [ r , d ]) → C [ ((S.fa f') ∘ u) ≈ f ])
+
+
 Yoneda-lemma : ∀ {l1 l2 l3} → -- D is small?
                {D : Category l1 l2 l3} {K : D ⟶ (Sets l2 l3)}
                {r : Category.Obj D} →
