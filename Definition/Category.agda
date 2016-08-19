@@ -56,3 +56,10 @@ _[_≈_] = Category._≈_
 _[1_] : ∀ {o ℓ e}
        → (C : Category o ℓ e) → (X : Obj[ C ]) → C [ X , X ]
 C [1 c ] = (Category.Id C) c
+
+_[_,_]′ :
+    {l1 l2 l3 : Level}
+  → (C : Category l1 l2 l3)
+  → Obj[ C ] → Obj[ C ] → Setoid l2 l3
+C [ x , y ]′ = (Category.Hom C) x y
+

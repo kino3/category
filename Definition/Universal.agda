@@ -45,7 +45,8 @@ universal-from_to_ : {l1 l2 l3 m1 m2 m3 : Level}
   (r : Obj[ D ])
   (u : C [ c , (Functor.fo S) r ])
   → Set (suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3))
-(universal-from c to S) r u = {!!} --universal-arrow-from c to S
+(universal-from_to_ {l1} {l2} {l3} {m1} {m2} {m3} {D} {C} c s) r u
+  = Universal {l1} {l2} {l3} {m1} {m2} {m3} {D} {C} {c} {s} r u --universal-arrow-from c to S
 
 {-
 _is_ : ∀ {m n} → (Set m) → (Set m → Set n) → Set n
