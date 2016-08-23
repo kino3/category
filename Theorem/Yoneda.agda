@@ -19,16 +19,17 @@ Proposition1 : ∀ {l1 l2 l3 m1 m2 m3} →
   {D : Category l1 l2 l3}
   {C : Category m1 m2 m3}
   {c : Obj[ C ]}
-  {d : Obj[ D ]} 
   (S : D ⟶ C) 
   {r : Obj[ D ]}
   {u : C [ c , (Functor.fo S) r ]} →
   (universal-from c to S) r u →
-   FB.Bijection (D [ r , d ]′) (C [ c , (Functor.fo S) d ]′)
-Proposition1 S (universality d₁ f x) = {!!}
-
--- (λ (f' : D [ r , d ]) → C [ ((S.fa f') ∘ u) ≈ f ])
-
+  ( (d : Obj[ D ]) → 
+    FB.Bijection (D [ r , d ]′) (C [ c , (Functor.fo S) d ]′) )
+Proposition1 S (universality d f prf) d' =
+  record { to = record {
+                   _⟨$⟩_ = {!!} ;
+                   cong  = {!!} } ;
+           bijective = {!!} }
 
 Yoneda-lemma : ∀ {l1 l2 l3} → -- D is small?
                {D : Category l1 l2 l3} {K : D ⟶ (Sets l2 l3)}
