@@ -25,10 +25,10 @@ Proposition1 : ∀ {l1 l2 l3 m1 m2 m3} →
   (universal-from c to S) r u →
   ( (d : Obj[ D ]) → 
     FB.Bijection (D [ r , d ]′) (C [ c , (Functor.fo S) d ]′) )
-Proposition1 S (universality d f prf) d' =
+Proposition1 {D = D} {C = C} S {u = u} (universality d f prf) d' =
   record { to = record {
-                   _⟨$⟩_ = {!!} ;
-                   cong  = {!!} } ;
+                   _⟨$⟩_ = λ f' → C [ Functor.fa S f' ∘ u ] ;
+                   cong  = λ Deq → {!!} } ;
            bijective = {!!} }
 
 Yoneda-lemma : ∀ {l1 l2 l3} → -- D is small?
