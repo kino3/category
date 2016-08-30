@@ -28,7 +28,7 @@ Proposition1 : ∀ {l1 l2 l3 m1 m2 m3} →
 Proposition1 {D = D} {C = C} S {u = u} (universality d f prf) d' =
   record { to = record {
                    _⟨$⟩_ = λ f' → C [ Functor.fa S f' ∘ u ] ;
-                   cong  = λ Deq → {!!} } ;
+                   cong  = λ {i} {j} i≈j → {!!} } ;
            bijective = {!!} }
 
 Yoneda-lemma : ∀ {l1 l2 l3} → -- D is small?
