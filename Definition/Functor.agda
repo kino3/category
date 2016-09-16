@@ -12,6 +12,7 @@ record Functor
     module C = Category C
     module B = Category B
   _≈_ = B._≈_
+  _∽_ = C._≈_
 
   field
     Obj-func : C.Obj → B.Obj
@@ -30,5 +31,7 @@ record Functor
     id   : {c : C.Obj} → fa (C.Id c) ≈ B.Id (fo c)
     comp : {a b c : C.Obj} {f : C [ a , b ]} {g : C [ b , c ]}
            → fa (g ∘ᶜ f) ≈ (fa g ∘ᵇ fa f)
+    ≈-resp : {a b : C.Obj} (f g : C [ a , b ]) 
+           → f ∽ g → fa f ≈ fa g
 
 syntax Functor C B = C ⟶ B
