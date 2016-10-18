@@ -3,7 +3,7 @@ module Theorem.Yoneda where
 open import Definition.Category
 open import Definition.Functor
 open import Definition.NaturalTransformation
---open import Definition.CovariantHomFunctor
+open import Definition.CovariantHomFunctor
 open import Category.Sets
 import Function.Bijection as FB
 
@@ -25,13 +25,23 @@ Proposition1 : ∀ {l1 l2 l3 m1 m2 m3} →
   (universal-from c to S) r u →
   ( (d : Obj[ D ]) → 
     FB.Bijection (D [ r , d ]′) (C [ c , (Functor.fo S) d ]′) )
-Proposition1 {D = D} {C = C} S {u = u} (universality d f prf) d' =
+Proposition1 {l1} {l2} {l3} {m1} {m2} {m3}
+  {D} {C} {c} S {r} {u} (universality d f prf) d' =
   record { to = record {
                    _⟨$⟩_ = λ f' → C [ Functor.fa S f' ∘ u ] ;
                    cong  = λ {i} {j} i≈j
-                   → Functor.≈-resp {C = D} {B = C} {!S!} {!!} {!!} {!!} };
+                   → {!!}
+                };
            bijective = {!!} }
 
+record representation
+  {l1 l3 : Level}
+  (D : Category l1 zero l3)
+  (K : Functor D (Sets zero {!!}))
+  : Set (suc (l1 ⊔ zero ⊔ l3)) where
+  field -- TODO: small means l2 = zero?
+    r : Category.Obj D
+    ψ : FB.Bijection {!D [ r ,-]!} {!!}
 {-
 Yoneda-lemma : ∀ {l1 l2 l3} → -- D is small?
                {D : Category l1 l2 l3} {K : D ⟶ (Sets l2 l3)}

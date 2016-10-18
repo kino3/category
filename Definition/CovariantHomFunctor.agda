@@ -24,7 +24,8 @@ CovariantHomFunctor {l1} {l2} {l3} C a =
                                            (Setoid.refl (Category.Hom C c c')) };
            id = id-proof;
            comp = comp-proof;
-           ≈-resp = {!!}}
+           ≈-resp = λ {a} {b} f g f≈g {x} {y} x≈y → Category.≈-cong C x≈y f≈g
+           }
  where
    id-proof : {c : Category.Obj C} {f g : C [ a , c ]}
       → C [ f ≈ g ]

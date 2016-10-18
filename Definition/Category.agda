@@ -3,8 +3,7 @@ open import Level public
 open import Relation.Binary using (Setoid) public
 import Relation.Binary as B
 
-_[_,_]' : ∀ {a b c} {X : Set a} 
-  → (h : X → X → Setoid b c) → X → X → Set b
+_[_,_]' : ∀ {a b c} {X : Set a} → (h : X → X → Setoid b c) → X → X → Set b
 h [ x , y ]' = Setoid.Carrier (h x y)
 
 record Category (l1 l2 l3 : Level) : Set (suc (l1 ⊔ l2 ⊔ l3)) where
@@ -48,6 +47,7 @@ _[_∘_] : ∀ {o ℓ e} → (C : Category o ℓ e)
        → ∀ {X Y Z} → (C [ Y , Z ]) → (C [ X , Y ])
        → C [ X , Z ]
 _[_∘_] = Category._o_ 
+--syntax Category._o_ = _[_∘_] 
 
 _[_≈_] : ∀ {o ℓ e} → (C : Category o ℓ e)
        → ∀ {X Y} → (f g : C [ X , Y ]) → Set e
@@ -63,3 +63,4 @@ _[_,_]′ :
   → Obj[ C ] → Obj[ C ] → Setoid l2 l3
 C [ x , y ]′ = (Category.Hom C) x y
 
+--syntax (Category.Hom C) x y = C [ x , y ]′
