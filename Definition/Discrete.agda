@@ -1,9 +1,11 @@
 module Definition.Discrete where
 open import Definition.Category
 
-discrete : {l1 l2 l3 : Level} → Category l1 l2 l3 → Set (l1 ⊔ l2)
-discrete record { Obj = Obj ; Hom = Hom ; _o_ = _o_ ; Id = Id ;
-  assoc = assoc ; unitL = unitL ; unitR = unitR ; ≈-cong = ≈-cong }
-  = {a b : Obj} → (f : Hom [ a , b ]')
-    → {!!}
+discrete : {l1 l2 l3 : Level} →
+  (C : Category l1 l2 l3) →
+  (a b : Obj[ C ]) →
+  (f : C [ _ , b ]) →
+  Set l3
+discrete C a b f = (C [ C [1 b ] ≈ f ]) -- all f is equal to Id(b).
+
 
