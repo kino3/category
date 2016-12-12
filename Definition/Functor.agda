@@ -1,6 +1,7 @@
 module Definition.Functor where
 open import Level
 open import Definition.Category
+open import NotationUtil
 
 record Functor 
   {l1 l2 l3 m1 m2 m3 : Level} 
@@ -11,27 +12,21 @@ record Functor
   private
     module C = Category C
     module B = Category B
-  _≈_ = B._≈_
-  _∽_ = C._≈_
 
   field
-    Obj-func : C.Obj → B.Obj
-    Arrow-func : {c c' : C.Obj} →
-               C [ c , c' ] → B [ Obj-func c , Obj-func c' ]
-
-  --syntax sugar
-  fo = Obj-func
-  fa = Arrow-func
+    fo : C.Obj → B.Obj
+    fa : {c c' : C.Obj} →
+               C [ c , c' ] → B [ fo c , fo c' ]
 
   private
     _∘ᵇ_ = B._o_
     _∘ᶜ_ = C._o_
-   
   field
-    id   : {c : C.Obj} → fa (C.Id c) ≈ B.Id (fo c)
+    id   : {c : C.Obj} → B [ fa (C [1 c ]) ≈ B [1 (fo c) ] ]
     comp : {a b c : C.Obj} {f : C [ a , b ]} {g : C [ b , c ]}
-           → fa (g ∘ᶜ f) ≈ (fa g ∘ᵇ fa f)
+           → B [ fa (g ∘ᶜ f) ≈ (fa g ∘ᵇ fa f) ]
     ≈-resp : {a b : C.Obj} (f g : C [ a , b ]) 
-           → f ∽ g → fa f ≈ fa g
+           → C [ f ≈ g ] → B [ fa f ≈ fa g ]
 
 syntax Functor C B = C ⟶ B
+

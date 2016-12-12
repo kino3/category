@@ -3,6 +3,23 @@ module Category.Three where
 open import Definition.Category
 open import Relation.Binary.PropositionalEquality
 
+data Obj3 : Set where
+  a : Obj3
+  b : Obj3
+  c : Obj3
+data Hom3 : Obj3 → Obj3 → Set where
+  a→b : Hom3 a b
+  b→c : Hom3 b c
+  a→c : Hom3 a c
+  id  : (x : Obj3) → Hom3 x x
+Hom3' : Obj3 → Obj3 → Setoid zero zero
+Hom3' = λ x y → record { Carrier = Hom3 x y ; _≈_ = _≡_ ; isEquivalence = isEquivalence }
+
+_∘_ : {a b c : Obj3} → Hom3' [ b , c ]' → Hom3' [ a , b ]' → Hom3' [ a , c ]'
+b→c  ∘ a→b  = a→c
+f    ∘ id _ = f
+id _ ∘ g    = g
+
 Three : Category zero zero zero
 Three = record
           { Obj = Obj3
@@ -15,22 +32,6 @@ Three = record
           ; ≈-cong = cong-prf
           }
   where
-    data Obj3 : Set where
-      a : Obj3
-      b : Obj3
-      c : Obj3
-    data Hom3 : Obj3 → Obj3 → Set where
-      a→b : Hom3 a b
-      b→c : Hom3 b c
-      a→c : Hom3 a c
-      id  : (x : Obj3) → Hom3 x x
-    Hom3' : Obj3 → Obj3 → Setoid zero zero
-    Hom3' = λ x y → record { Carrier = Hom3 x y ; _≈_ = _≡_ ; isEquivalence = isEquivalence }
-
-    _∘_ : {a b c : Obj3} → Hom3' [ b , c ]' → Hom3' [ a , b ]' → Hom3' [ a , c ]'
-    b→c  ∘ a→b  = a→c
-    f    ∘ id _ = f
-    id _ ∘ g    = g
 
     assoc-prf : {w x y z : Obj3} {f : Hom3' [ w , x ]'} {g : Hom3' [ x , y ]'}
                 {k : Hom3' [ y , z ]'} → Hom3' [ k ∘ (g ∘ f) ≈ (k ∘ g) ∘ f ]'
