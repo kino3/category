@@ -46,9 +46,12 @@ import Relation.Binary.PropositionalEquality as Eq
         lemma {f1 = ≤′-step f}  {≤′-step .f} Eq.refl = Eq.refl
     
     unitL-prf : {a b : ℕ} {f : ℕHom [ a , b ]'} → ℕHom [ x≤x b ∘ f ≈ f ]'
-    unitL-prf = {!!}
+    unitL-prf {f = ≤′-refl}   = Eq.refl
+    unitL-prf {f = ≤′-step f} = Eq.refl
     unitR-prf : {b c : ℕ} {g : ℕHom [ b , c ]'} → ℕHom [ g ∘ x≤x b ≈ g ]'
-    unitR-prf = {!!}
+    unitR-prf {g = ≤′-refl}   = Eq.refl
+    unitR-prf {g = ≤′-step g} = Eq.refl
+
     cong-prf : {a b c : ℕ} {f1 f2 : ℕHom [ a , b ]'} {g1 g2 : ℕHom [ b , c ]'} →
               ℕHom [ f1 ≈ f2 ]' → ℕHom [ g1 ≈ g2 ]' → ℕHom [ g1 ∘ f1 ≈ g2 ∘ f2 ]'
-    cong-prf = {!!}
+    cong-prf Eq.refl Eq.refl = Eq.refl
