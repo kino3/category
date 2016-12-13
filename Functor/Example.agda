@@ -12,8 +12,8 @@ fo13 * = a
 fa13 : {x1 x2 : Obj[ One ]} → One [ x1 , x2 ] → Three [ fo13 x1 , fo13 x2 ]
 fa13 {*} {*} h = id a
 
-1to3 : One ⟶ Three
-1to3 = record
+1⟶3 : One ⟶ Three
+1⟶3 = record
               { fo = fo13;
                 fa = fa13;
                 id = id-proof ;
@@ -30,3 +30,4 @@ fa13 {*} {*} h = id a
     resp-proof : {a b : Category.Obj One} (f g : One [ a , b ]) →
          One [ f ≈ g ] → Three [ fa13 f ≈ fa13 g ]
     resp-proof {*} {*} *→* *→* Eq.refl = Eq.refl
+
