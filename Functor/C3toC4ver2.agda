@@ -19,8 +19,8 @@ fa34 (id a) = id o2
 fa34 (id b) = id o3
 fa34 (id c) = id o4
 
-3⟶4 : Three ⟶ Four
-3⟶4 = record
+3⟶4' : Three ⟶ Four
+3⟶4' = record
               { fo = fo34;
                 fa = fa34;
                 id = id-prf;
