@@ -42,6 +42,15 @@ hoge = record { r = a ; u = id o1 ;
     where
       universal-prf : (d : Obj[ Three ]) (f : Four [ o1 , (F.fo 3⟶4) d ])
         → ∃! (Three [_≈_]) (λ f' → Four [ ((F.fa 3⟶4) f') ∘₄ id o1 ≈ f ])
-      universal-prf a (id .o1) = id a , Eq.refl , ?
-      universal-prf b 1→2      = {!!} , {!!}
-      universal-prf c 1→3      = {!!} , {!!}
+      universal-prf a (id .o1) = id a , Eq.refl , unique-ida
+        where
+          unique-ida : {y : Hom3 a a} → Four [ F.fa 3⟶4 y ∘₄ id o1 ≈ id o1 ] → Three [ id a ≈ y ]
+          unique-ida {id .a} prf = Eq.refl
+      universal-prf b 1→2      = a→b , Eq.refl , unique-a→b
+        where
+          unique-a→b : {y : Hom3 a b} → Four [ F.fa 3⟶4 y ∘₄ id o1 ≈ 1→2 ] → Three [ a→b ≈ y ]
+          unique-a→b {a→b} prf = Eq.refl
+      universal-prf c 1→3      = a→c , Eq.refl , unique-a→c
+        where
+          unique-a→c : {y : Hom3 a c} → Four [ F.fa 3⟶4 y ∘₄ id o1 ≈ 1→3 ] → Three [ a→c ≈ y ]
+          unique-a→c {a→c} prf = Eq.refl
