@@ -3,19 +3,21 @@ module Definition.CovariantHomFunctor where
 open import Definition.Category
 open import Definition.Functor
 open import Category.Sets
+open import NotationUtil
+
 import Relation.Binary.EqReasoning as EqR
 
 CovariantHomFunctor : {l1 l2 l3 : Level}
   (C : Category l1 l2 l3) →
    Obj[ C ] → Functor C (Sets l2 l3)
 CovariantHomFunctor {l1} {l2} {l3} C a =
-  record { Obj-func = λ b
+  record { fo = λ b
               → record {
                      Carrier = C [ a , b ] ;
-                     _≈_ = Category._≈_ C ;
+                     _≈_ = C [_≈_] ;
                      -- TODO: refinement for readability.
                      isEquivalence = Setoid.isEquivalence (Category.Hom C a b) };
-           Arrow-func = λ {c} {c'}
+           fa = λ {c} {c'}
                       → λ (k : C [ c , c' ])
                       → record {
                          _⟨$⟩_ = λ (f : C [ a , c ]) → C [ k ∘ f ] ;

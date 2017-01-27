@@ -1,5 +1,7 @@
 module Theorem.Yoneda where
 
+open import NotationUtil
+
 open import Definition.Category
 open import Definition.Functor
 open import Definition.NaturalTransformation
@@ -41,7 +43,9 @@ record representation
   : Set (suc (l1 ⊔ zero ⊔ l3)) where
   field -- TODO: small means l2 = zero?
     r : Category.Obj D
-    ψ : FB.Bijection {!D [ r ,-]!} {!!}
+    ψ : FB.Bijection -- TODO: this is not FB.Bijection...
+          (record { Carrier = {!CovariantHomFunctor D!} ; _≈_ = {!!} ; isEquivalence = {!!} })
+          (record { Carrier = {!K!} ; _≈_ = {!!} ; isEquivalence = {!!} })
 {-
 Yoneda-lemma : ∀ {l1 l2 l3} → -- D is small?
                {D : Category l1 l2 l3} {K : D ⟶ (Sets l2 l3)}

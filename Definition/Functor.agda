@@ -30,3 +30,14 @@ record Functor
 
 syntax Functor C B = C ⟶ B
 
+{-
+FunctorSetoid :
+  {l1 l2 l3 m1 m2 m3 : Level} 
+  {C : Category l1 l2 l3}
+  {B : Category m1 m2 m3} → 
+  Functor C B → Setoid {!!} {!!}
+FunctorSetoid {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} f = record {
+                    Carrier = Functor C B;
+                    _≈_ = {!!} ;
+                    isEquivalence = {!!} }
+-}
