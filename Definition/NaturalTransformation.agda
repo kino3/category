@@ -28,3 +28,37 @@ record NaturalTransformation
 
 syntax NaturalTransformation S T = S ∸> T
 
+components-of : {l1 l2 l3 m1 m2 m3 : Level} 
+  {C : Category l1 l2 l3} 
+  {B : Category m1 m2 m3}
+  {S T : Functor C B} {c : Obj[ C ]} → S ∸> T → Set m2
+components-of {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} {S} {T} {c} τ = B [ S.fo c , T.fo c ]
+  where
+    module S = Functor S
+    module T = Functor T
+
+component : {l1 l2 l3 m1 m2 m3 : Level} 
+  {C : Category l1 l2 l3} 
+  {B : Category m1 m2 m3}
+  {S T : Functor C B} → S ∸> T → (c : Obj[ C ]) → B [ Functor.fo S c , Functor.fo T c ]
+component {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} {S} {T} τ c = NaturalTransformation.τ τ c
+
+inverses :
+  {l1 l2 l3 : Level} 
+  {C : Category l1 l2 l3}
+  {a b : Obj[ C ]} → C [ a , b ] → Set l2
+inverses {l1} {l2} {l3} {C} {a} {b} hom = C [ b , a ]
+
+syntax inverses hom = hom ⁻¹
+
+-- TODO: invertible?
+
+open import Data.Product
+
+natural-equivalence :
+  {l1 l2 l3 m1 m2 m3 : Level} 
+  {C : Category l1 l2 l3} 
+  {B : Category m1 m2 m3}
+  (S T : Functor C B) → Set {!!} 
+natural-equivalence {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} S T
+  =  {!!} --Σ[ τ ∈ S ∸> T ] (∀ (c : Obj[ C ]) → {!!})
