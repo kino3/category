@@ -38,14 +38,14 @@ Proposition1 {l1} {l2} {l3} {m1} {m2} {m3}
 
 record representation
   {l1 l3 : Level}
-  (D : Category l1 zero l3)
-  (K : Functor D (Sets zero {!!}))
-  : Set (suc (l1 ⊔ zero ⊔ l3)) where
-  field -- TODO: small means l2 = zero?
+  (D : Category l1 zero zero)
+  (K : Functor D (Sets zero zero))
+  : Set (suc (suc zero)) where
+  field
     r : Category.Obj D
-    ψ : FB.Bijection -- TODO: this is not FB.Bijection...
-          (record { Carrier = {!CovariantHomFunctor D!} ; _≈_ = {!!} ; isEquivalence = {!!} })
-          (record { Carrier = {!K!} ; _≈_ = {!!} ; isEquivalence = {!!} })
+    ψ : (D [ r ,-]) ≅ K
+-- TODO: level may be incorrect.          
+
 {-
 Yoneda-lemma : ∀ {l1 l2 l3} → -- D is small?
                {D : Category l1 l2 l3} {K : D ⟶ (Sets l2 l3)}

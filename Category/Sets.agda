@@ -9,7 +9,7 @@ import Relation.Binary as B
 Agda的な都合でSetoidにしないとダメだが、実態としては本のSetsのように使うので
 名前はSetsにする。(正確にはSetoidの圏)
 -}
-Sets : (c l : Level) → Category (suc (c ⊔ l)) ((c ⊔ l)) ((c ⊔ l))
+Sets : (c l : Level) → Category (suc (c ⊔ l)) (c ⊔ l) (c ⊔ l)
 Sets c l = record
          { Obj = Setoid c l
          ; Hom = Feq._⇨_
