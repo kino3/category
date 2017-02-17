@@ -27,34 +27,42 @@ Proposition1 : ∀ {l1 l2 l3 m1 m2 m3} →
   (universal-from c to S) r u →
   ( (d : Obj[ D ]) → 
     FB.Bijection (D [ r , d ]′) (C [ c , (Functor.fo S) d ]′) )
-Proposition1 {l1} {l2} {l3} {m1} {m2} {m3}
+
+Proposition1
+  {l1} {l2} {l3} {m1} {m2} {m3}
   {D} {C} {c} S {r} {u} (universality d f prf) d' =
   record { to = record {
                    _⟨$⟩_ = λ f' → C [ Functor.fa S f' ∘ u ] ;
                    cong  = λ {i} {j} i≈j
                    → {!!}
                 };
-           bijective = {!!} }
+           bijective = record {
+                         injective = {!!} ;
+                         surjective = {!!} } }
 
 record representation
-  {l1 l3 : Level}
+  {l1 : Level}
   (D : Category l1 zero zero)
-  (K : Functor D (Sets zero zero))
+  (K : D ⟶ (Sets zero zero))
   : Set (suc (suc zero)) where
   field
     r : Category.Obj D
     ψ : (D [ r ,-]) ≅ K
 -- TODO: level may be incorrect.          
 
-{-
-Yoneda-lemma : ∀ {l1 l2 l3} → -- D is small?
-               {D : Category l1 l2 l3} {K : D ⟶ (Sets l2 l3)}
-               {r : Category.Obj D} →
-               FB.Bijection {l3} {l3}
-                 {!!} {-
-                 (record { Carrier = (D [ r ,-]) ∸> K ; --TODO infix level
-                           _≈_ = {!!} ;
-                           isEquivalence = {!!} }) -}
+postulate Proposition2 : Set
+
+import Relation.Binary.PropositionalEquality as Eq using (_≡_;isEquivalence)
+
+Yoneda-lemma : {l1 : Level} →
+               {D : Category l1 zero zero}
+               (K : D ⟶ (Sets zero zero))
+               (r : Category.Obj D) →
+               FB.Bijection 
+                 (record { Carrier = (D [ r ,-]) ∸> K ; _≈_ = Eq._≡_ ; isEquivalence = Eq.isEquivalence}) 
                  ((Functor.fo K) r)
-Yoneda-lemma = {!!}
--}
+Yoneda-lemma K r = record {
+  to = record { _⟨$⟩_ = λ α → {!NaturalTransformation.τ α r!} ;
+                cong  = {!!} } ;
+  bijective = record { injective = {!!} ; surjective = {!!} } }
+
