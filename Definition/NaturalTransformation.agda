@@ -40,28 +40,21 @@ components-of {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} {S} {T} {c} τ = B [ S.fo c 
 component : {l1 l2 l3 m1 m2 m3 : Level} 
   {C : Category l1 l2 l3} 
   {B : Category m1 m2 m3}
-  {S T : Functor C B} → S ∸> T → (c : Obj[ C ]) → B [ Functor.fo S c , Functor.fo T c ]
-component {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} {S} {T} τ c = NaturalTransformation.τ τ c
+  {S T : Functor C B} → S ∸> T → (c : Obj[ C ]) → Set m2
+component {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} {S} {T} τ c =
+  components-of {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} {S} {T} {c} τ
 
-
-inverses :
-  {l1 l2 l3 : Level} 
-  {C : Category l1 l2 l3}
-  {a b : Obj[ C ]} → C [ a , b ] → Set l2
-inverses {l1} {l2} {l3} {C} {a} {b} hom = C [ b , a ]
-
-syntax inverses hom = hom ⁻¹
-
--- TODO: invertible?
-
-open import Data.Product
+open import Data.Product using (Σ-syntax)
+open import Definition.Properties using (invertible)
 
 natural-equivalence :
   {l1 l2 l3 m1 m2 m3 : Level} 
   {C : Category l1 l2 l3} 
   {B : Category m1 m2 m3}
-  (S T : Functor C B) → Set {!!} 
+  (S T : Functor C B) → Set ((suc (l1 ⊔ l2 ⊔ l3 ⊔ m1 ⊔ m2 ⊔ m3)))
 natural-equivalence {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} S T
-  =  {!!} --Σ[ τ ∈ S ∸> T ] (∀ (c : Obj[ C ]) → {!!})
+  =  Σ[ τ ∈ S ∸> T ] ((c : Obj[ C ]) → (τc : component τ c) → invertible {m1} {m2} {m3} {B} τc)
 
 natural-isomorphism = natural-equivalence
+
+syntax natural-isomorphism S T = S ≅ T
