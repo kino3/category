@@ -43,6 +43,7 @@ component : {l1 l2 l3 m1 m2 m3 : Level}
   {S T : Functor C B} → S ∸> T → (c : Obj[ C ]) → B [ Functor.fo S c , Functor.fo T c ]
 component {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} {S} {T} τ c = NaturalTransformation.τ τ c
 
+
 inverses :
   {l1 l2 l3 : Level} 
   {C : Category l1 l2 l3}
@@ -62,3 +63,5 @@ natural-equivalence :
   (S T : Functor C B) → Set {!!} 
 natural-equivalence {l1} {l2} {l3} {m1} {m2} {m3} {C} {B} S T
   =  {!!} --Σ[ τ ∈ S ∸> T ] (∀ (c : Obj[ C ]) → {!!})
+
+natural-isomorphism = natural-equivalence
