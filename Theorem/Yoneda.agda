@@ -30,19 +30,16 @@ Proposition1 : ∀ {l1 l2 l3 m1 m2 m3} →
 
 Proposition1
   {l1} {l2} {l3} {m1} {m2} {m3}
-  {D} {C} {c} S {r} {u} (universality d f prf) d' =
+  {D} {C} {c} S {r} {u} univ d' =
   record { to = record {
                    _⟨$⟩_ = λ f' → C [ Functor.fa S f' ∘ u ] ;
-                   cong  = λ {i} {j} i≈j
-                   → {!!}
+                   cong  = λ i≈j → Functor.≈-resp S {!!} {!!} {!!} --λ {i} {j} i≈j → {!!} --Functor.≈-resp S {!!} {!!} {!!}
                 };
            bijective = record {
                          injective = {!!} ;
                          surjective = {!!} } }
-
 record representation
-  {l1 : Level}
-  (D : Category l1 zero zero)
+  (D : Category zero zero zero)
   (K : D ⟶ (Sets zero zero))
   : Set (suc (suc zero)) where
   field
@@ -53,16 +50,18 @@ record representation
 postulate Proposition2 : Set
 
 import Relation.Binary.PropositionalEquality as Eq using (_≡_;isEquivalence)
-
-Yoneda-lemma : {l1 : Level} →
-               {D : Category l1 zero zero}
+{-
+Yoneda-lemma : {D : Category zero zero zero}
                (K : D ⟶ (Sets zero zero))
                (r : Category.Obj D) →
                FB.Bijection 
-                 (record { Carrier = (D [ r ,-]) ∸> K ; _≈_ = Eq._≡_ ; isEquivalence = Eq.isEquivalence}) 
+                 (record { Carrier = (D [ r ,-]) ∸> K ;
+                           _≈_ = Eq._≡_ ;
+                           isEquivalence = Eq.isEquivalence}) 
                  ((Functor.fo K) r)
 Yoneda-lemma K r = record {
-  to = record { _⟨$⟩_ = λ α → {!NaturalTransformation.τ α r!} ;
+  to = record { _⟨$⟩_ = λ α → {!!} ;
                 cong  = {!!} } ;
   bijective = record { injective = {!!} ; surjective = {!!} } }
 
+-}
